@@ -71,7 +71,7 @@ class Users(AbstractBaseUser, PermissionsMixin):
     full_name = models.CharField(max_length=20, null=False)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
 
-    date_of_birth = models.DateField
+    date_of_birth = models.DateField(null=True)
 
     phoneNumberRegex = RegexValidator(regex=r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
     phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
