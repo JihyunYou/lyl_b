@@ -1,0 +1,59 @@
+from django.db import models
+
+from django.core.validators import MaxValueValidator, MinValueValidator
+
+# 유저(강사), 회원 모델 import
+from custom_users.models import User as Teacher
+from members.models import Member
+
+
+GENDER_CHOICES = [
+    ('s', '개인'), ('p', '페어')
+]
+
+ATTENDANCE_STATUS = [
+    (0, '수업 예정'), (1, '출석'), (2, '무단 취소')
+]
+
+
+# 수업 관리
+class Lesson(models.Model):
+    lesson_date = models.DateField(null=False)
+    lesson_time = models.TimeField(null=False)
+
+    teacher_id = models.ForeignKey(
+        Teacher, related_name="lesson_teacher", on_delete=models.SET_NULL, db_column="teacher_id",
+        null=True
+    )
+
+    lesson_type = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
+
+    input_dtime = models.DateTimeField(auto_now_add=True)
+
+
+# 출석 관리
+class Attendance(models.Model):
+    lesson_id = models.ForeignKey(
+        Lesson, related_name="lesson", on_delete=models.CASCADE, db_column="lesson_id",
+        null=False
+    )
+    member_id = models.ForeignKey(
+        Member, related_name="attendance_member", on_delete=models.CASCADE, db_column="member_id",
+        null=False
+    )
+
+    # 출석 상태
+    #   1: 수업 예정
+    #   2: 정상 출석
+    #   3: 무단 취소
+    status = models.IntegerField(
+        choices=ATTENDANCE_STATUS,
+        null=True, blank=True,
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(2)
+        ],
+        default=1
+    )
+
+    input_dtime = models.DateTimeField(auto_now_add=True)

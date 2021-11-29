@@ -4,17 +4,17 @@ from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import Group
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
-from .models import Users
+from .models import User
 
-# Register your models here.
 
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
-    model = Users
+    model = User
 
     # Admin User 화면에서 User 리스트에 출력되는 컬럼
-    list_display = ('email', 'full_name', 'gender', 'date_of_birth', 'phone_number', 'user_grade', 'is_admin', 'is_active',)
+    list_display = (
+    'email', 'full_name', 'gender', 'date_of_birth', 'phone_number', 'user_grade', 'is_admin', 'is_active',)
 
     # 화면 우측에 필터링 옵션에 출력되는 항목
     list_filter = ('gender', 'user_grade', 'is_admin', 'is_active',)
@@ -41,5 +41,6 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
-admin.site.register(Users, CustomUserAdmin)
+
+admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(Group)

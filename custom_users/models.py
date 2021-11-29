@@ -40,7 +40,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-class Users(AbstractBaseUser, PermissionsMixin):
+class User(AbstractBaseUser, PermissionsMixin):
     # Custom 헬퍼 클래스를 사용하도록 설정
     objects = UserManager()
 
