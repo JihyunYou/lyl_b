@@ -1,0 +1,32 @@
+<!--{% load static %}-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href='/static/fullcalendar/main.css' rel='stylesheet' />
+    <script src='/static/fullcalendar/main.js'></script>
+    <title>메인</title>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+              initialView: 'dayGridMonth'
+            });
+            calendar.render();
+        });
+
+        var calendar = new Calendar(calendarEl, {
+          dateClick: function() {
+            alert('a day has been clicked!');
+          }
+        });
+    </script>
+</head>
+<body>
+    테스트
+
+    <div id='calendar'></div>
+</body>
+</html>
