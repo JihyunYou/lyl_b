@@ -1,0 +1,28 @@
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LYL.B</title>
+</head>
+<body>
+    <div class="container">
+        <h1>회원 관리</h1>
+        {% for member in member_objects %}
+            {{ member.id }}
+            {{ member.name }}
+            {{ member.gender }}
+            {{ member.date_of_birth }}
+            {{ member.phone_number }}
+            {{ member.teacher_id }}
+        {% endfor %}
+    </div>
+
+</body>
+</html>

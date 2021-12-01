@@ -1,32 +1,85 @@
-<!--{% load static %}-->
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <link href='/static/fullcalendar/main.css' rel='stylesheet' />
     <script src='/static/fullcalendar/main.js'></script>
-    <title>메인</title>
+
+    <link rel="shortcut icon" href="/static/img/logo_invisible.png">
+    <title>LYL.B</title>
 
     <script>
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+
+              timeZone: 'Asia/Seoul',
+              events: [
+                {% for i in events %}
+                {
+                  id: 'a',
+                  title: '{{ i.title }}',
+                  url: 'http://127.0.0.1:8000/admin/',
+                  start: '{{ i.start }}',
+                  end: '{{ i.end }}'
+                },
+                {% endfor %}
+              ],
+
               initialView: 'dayGridMonth'
             });
             calendar.render();
         });
 
-        var calendar = new Calendar(calendarEl, {
-          dateClick: function() {
-            alert('a day has been clicked!');
-          }
-        });
     </script>
 </head>
 <body>
-    테스트
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #00554C">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/static/img/logo_white.jpg" alt="" width="40" height="40">
+                LYL.B Pilates
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="member">회원관리</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Features</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div id='calendar'></div>
+    <div class="container">
+
+        <div>
+        {% for lesson in lesson_objects %}
+            {{ forloop.counter }}
+            {{ lesson }}
+        {% endfor %}
+
+        {% for event in events %}
+            {{ event }}
+        {% endfor %}
+
+        </div>
+
+        <div id='calendar'></div>
+
+    </div>
 </body>
 </html>

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'custom_users',
     'members',
     'lessons',
+    'bootstrap5',
 ]
 
 MIDDLEWARE = [
