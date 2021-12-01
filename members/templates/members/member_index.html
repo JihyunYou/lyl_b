@@ -1,28 +1,35 @@
-{# Load the tag library #}
-{% load bootstrap5 %}
+{% extends 'lessons/base.html' %}
 
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+{% block main_area %}
+<h1>회원 관리</h1>
+<a class="btn btn-info btn-sm float-right" href="/member/create_member/" role="button">
+    <i class="fas fa-pen">&nbsp;&nbsp;신규 회원</i>
+</a>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LYL.B</title>
-</head>
-<body>
-    <div class="container">
-        <h1>회원 관리</h1>
-        {% for member in member_objects %}
-            {{ member.id }}
-            {{ member.name }}
-            {{ member.gender }}
-            {{ member.date_of_birth }}
-            {{ member.phone_number }}
-            {{ member.teacher_id }}
-        {% endfor %}
-    </div>
+<div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">이름</th>
+                <th scope="col">성별</th>
+                <th scope="col">생일</th>
+                <th scope="col">핸드폰 번호</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in member_objects %}
+             <tr onClick="location.href='/member/{{ member.id }}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ member.name }}</td>
+                <td>{{ member.gender }}</td>
+                <td>{{ member.date_of_birth }}</td>
+                <td>{{ member.phone_number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

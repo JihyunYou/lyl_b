@@ -9,6 +9,9 @@ GENDER_CHOICES = [
     ('m', '남자'), ('f', '여자')
 ]
 
+REGISTRATION_TYPE = [
+    (1, '첫등록'), (2, '재등록')
+]
 
 # 강습 회원
 class Member(models.Model):

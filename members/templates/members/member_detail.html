@@ -1,11 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'lessons/base.html' %}
+
+{% block main_area %}
+<div>
     {{ member_object.name }}
-    <div class="container"></div>
-</body>
-</html>
+</div>
+
+<h3>등록 정보</h3>
+<div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Member ID</th>
+                <th scope="col">등록 순번</th>
+                <th scope="col">등록 횟수</th>
+                <th scope="col">등록일</th>
+                <th scope="col">수강료</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in registration_objects %}
+             <tr onClick="location.href='/member/{{ registration.id }}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ registration.member_id }}</td>
+                 <td>{{ registration.reg_seq }}</td>
+                <td>{{ registration.times }}</td>
+                <td>{{ registration.reg_date }}</td>
+                <td>{{ registration.tuition }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

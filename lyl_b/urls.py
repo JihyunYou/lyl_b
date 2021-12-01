@@ -23,5 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lessons.views.index, name='index'),
     path('member/', members.views.index, name='member_index'),
-    path('member/<int:member_id>/', members.views.detail, name='member_detail')
+    path('member/<int:member_id>/', members.views.detail, name='member_detail'),
+    path('member/create_member/', members.views.MemberCreate.as_view(success_url="/member/")),
+    path(
+        'member/<int:member_id>/create_registration',
+        members.views.RegistrationCreate.as_view(success_url="/member/")
+    ),
 ]
