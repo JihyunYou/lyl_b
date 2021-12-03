@@ -25,7 +25,7 @@ class LessonAdmin(admin.ModelAdmin):
     )
 
     def get_teacher_name(self, obj):
-        return obj.teacher_id.full_name
+        return obj.teacher_id.name
 
     get_teacher_name.admin_order_field = "teacher_id"  # 정렬 가능 설정
     get_teacher_name.short_description = "담당강사"  # 컬럼 헤더명 변경

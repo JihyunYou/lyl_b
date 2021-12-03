@@ -16,42 +16,46 @@ GENDER_CHOICES = [
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, email, full_name, password=None):
-        if not email:
-            raise ValueError('Users must have an email address')
+    def create_user(self, name, password=None):
+        # if not email:
+        #     raise ValueError('Users must have an email address')
 
         user = self.model(
-            email=self.normalize_email(email),
-            full_name=full_name,
+            # email=self.normalize_email(email),
+            name=name,
         )
 
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, full_name, password):
+    def create_superuser(self, name, password):
         user = self.create_user(
-            email,
+            # email,
+            name=name,
             password=password,
-            full_name=full_name,
         )
         # user.is_superuser = True
         user.is_admin = True
         user.save(using=self._db)
         return user
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     # Custom 헬퍼 클래스를 사용하도록 설정
     objects = UserManager()
 
-    # Email - ID 역할
-    email = models.EmailField(
-        verbose_name='email',
-        max_length=255,
-        unique=True,
-    )
-    # Username을 email로 명시
-    USERNAME_FIELD = 'email'
+    # email = models.EmailField(
+    #     verbose_name='email',
+    #     max_length=255,
+    #     unique=True,
+    # )
+
+    # 이름 - ID 역할
+    name = models.CharField(
+        verbose_name='name',
+        max_length=20, unique=True, null=False)
+    USERNAME_FIELD = 'name'     # Username을 name로 명시
 
     # 사이트 사용자 종류
     #   1: 사이트 관리자
@@ -68,7 +72,6 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=4
     )
 
-    full_name = models.CharField(max_length=20, null=False)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
 
     date_of_birth = models.DateField(null=True)
@@ -83,10 +86,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     # is_staff = models.BooleanField(default=False)
 
     # REQUIRED_FIELDS 안 쓰면 createsuperuser 할 때 안 나타남
-    REQUIRED_FIELDS = ['full_name']
+    # REQUIRED_FIELDS = ['name']
 
     def __str__(self):
-        return self.email
+        return self.name
 
     # 커스텀 유저 모델을 기본 유저 모델로 사용하기 위해 구현한 부분
     #   True를 반환하여 권한이 있음을 알림

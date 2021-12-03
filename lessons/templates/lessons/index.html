@@ -2,45 +2,54 @@
 
 {% block main_area %}
 
-        <script>
+<script>
 
-            document.addEventListener('DOMContentLoaded', function() {
-                var calendarEl = document.getElementById('calendar');
-                var calendar = new FullCalendar.Calendar(calendarEl, {
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
 
-                  timeZone: 'Asia/Seoul',
-                  events: [
-                    {% for i in events %}
-                    {
-                      id: 'a',
-                      title: '{{ i.title }}',
-                      url: 'http://127.0.0.1:8000/admin/',
-                      start: '{{ i.start }}',
-                      end: '{{ i.end }}'
-                    },
-                    {% endfor %}
-                  ],
+          timeZone: 'Asia/Seoul',
+          locale: 'ko',
+          firstDay: 1,
+          allDaySlot: false,
+          slotMinTime: "06:00:00",
+          contentHeight:"auto",
 
-                  initialView: 'dayGridMonth'
-                });
-                calendar.render();
-            });
+<!--                  themeSystem: 'bootstrap',-->
 
-        </script>
+          headerToolbar: {
+            start: 'dayGridMonth,timeGridWeek,timeGridDay',
+            center: 'title',
+            end: 'today prev,next'
+          },
 
+          events: [
+            {% for i in events %}
+            {
+              id: 'a',
+              title: '{{ i.title }}',
+              url: '/lesson/{{ i.lesson_id }}/',
+              start: '{{ i.start }}',
+              end: '{{ i.end }}'
+            },
+            {% endfor %}
+          ],
 
-        <div>
-        {% for lesson in lesson_objects %}
-            {{ forloop.counter }}
-            {{ lesson }}
-        {% endfor %}
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
+    });
 
-        {% for event in events %}
-            {{ event }}
-        {% endfor %}
+</script>
 
-        </div>
+<!--    실제 화면   -->
+<div class="text-end">
+    <a class="btn btn-success btn-sm float-right" href="/lesson/create_lesson/" role="button">
+        <i class="fas fa-pen">&nbsp;&nbsp;스케쥴 추가</i>
+    </a>
+</div>
+<div class="py-1"></div>
+<div id='calendar'></div>
 
-        <div id='calendar'></div>
 
 {% endblock %}

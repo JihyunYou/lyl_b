@@ -22,11 +22,28 @@ import members.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lessons.views.index, name='index'),
+
     path('member/', members.views.index, name='member_index'),
     path('member/<int:member_id>/', members.views.detail, name='member_detail'),
     path('member/create_member/', members.views.MemberCreate.as_view(success_url="/member/")),
     path(
         'member/<int:member_id>/create_registration',
         members.views.RegistrationCreate.as_view(success_url="/member/")
+    ),
+
+    path('lesson/', lessons.views.list, name='lesson_list'),
+    path(
+        'lesson/<int:lesson_id>/',
+        lessons.views.detail,
+        name='lesson_detail'
+    ),
+    path(
+        'lesson/create_lesson/',
+        lessons.views.LessonCreate.as_view(success_url="/lesson/<int:lesson_id>/")
+    ),
+    path(
+        'lesson/manage_attendance/',
+        lessons.views.manage_attendance,
+        name='manage_attendance'
     ),
 ]

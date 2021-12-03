@@ -13,14 +13,13 @@ class CustomUserAdmin(UserAdmin):
     model = User
 
     # Admin User 화면에서 User 리스트에 출력되는 컬럼
-    list_display = (
-    'email', 'full_name', 'gender', 'date_of_birth', 'phone_number', 'user_grade', 'is_admin', 'is_active',)
+    list_display = ('name', 'gender', 'date_of_birth', 'phone_number', 'user_grade', 'is_admin', 'is_active',)
 
     # 화면 우측에 필터링 옵션에 출력되는 항목
     list_filter = ('gender', 'user_grade', 'is_admin', 'is_active',)
 
     fieldsets = (
-        ('필수정보', {'fields': ('email', 'password', 'full_name')}),
+        ('필수정보', {'fields': ('name', 'password')}),
         ('인적사항', {'fields': ('gender', 'phone_number', 'date_of_birth')}),
         ('권한설정', {'fields': ('user_grade', 'is_admin', 'is_active')}),
     )
@@ -28,7 +27,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'full_name', 'is_admin', 'is_active')}
+            'fields': ('name', 'password1', 'password2', 'is_admin', 'is_active')}
          ),
     )
     #   add_fieldsets 의 내용을 아래와 같이 하면 회원가입시 필드 에러 발생
@@ -38,8 +37,8 @@ class CustomUserAdmin(UserAdmin):
     #     ('권한설정', {'fields': ('user_grade', 'is_admin', 'is_active')}),
     # )
 
-    search_fields = ('email',)
-    ordering = ('email',)
+    search_fields = ('name',)
+    ordering = ('name',)
 
 
 admin.site.register(User, CustomUserAdmin)

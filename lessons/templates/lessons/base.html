@@ -13,6 +13,15 @@
     <link href='/static/fullcalendar/main.css' rel='stylesheet' />
     <script src='/static/fullcalendar/main.js'></script>
 
+    <style type="text/css">
+        #calendar a {
+            color: black;
+
+        }
+        #calendar .fc-day.fc-day-sat a { color:#0000FF; }    /* 토요일 */
+        #calendar .fc-day-sun a { color:#FF0000; }    /* 일요일 */
+    </style>
+
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
 
     <link rel="shortcut icon" href="/static/img/logo_invisible.png">
@@ -21,31 +30,51 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #00554C">
         <div class="container">
-            <a class="navbar-brand" href="/">
-                <img src="/static/img/logo_white.jpg" alt="" width="50" height="50">
+            <a class="navbar-brand" href="/" style="color: #FFFFFF;">
+<!--                <img src="/static/img/logo_white.jpg" alt="" width="50" height="50">-->
                 LYL.B Pilates
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/member">회원관리</a>
+                        <a class="nav-link active" aria-current="page" href="/member" style="color: #FFFFFF;">회원관리</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Features</a>
+                        <a class="nav-link active" aria-current="page" href="/lesson" style="color: #FFFFFF;">수업관리</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="py-3"></div>
+    <div class="container-lg">
+
+<!--        <img class="img-fluid" src="/static/img/logo_white.jpg" alt="">-->
         {% block main_area %}
 
         {% endblock %}
 
     </div>
+    <div class="py-3"></div>
+
+    <!--  footer  -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-muted">© 2021 Peach All right reserved</p>
+
+            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <img src="/static/img/logo_white.jpg" alt="" width="50" height="50">
+            </a>
+
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+        </footer>
+    </div>
+
 </body>
 </html>

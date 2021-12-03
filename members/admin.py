@@ -7,7 +7,7 @@ class MemberAdmin(admin.ModelAdmin):
 
     # Admin 화면에서 User 리스트에 출력되는 컬럼
     list_display = (
-        'id', 'name', 'gender', 'date_of_birth', 'phone_number', 'teacher_id',)
+        'name', 'gender', 'date_of_birth', 'phone_number', 'teacher_id',)
 
     # 화면 우측에 필터링 옵션에 출력되는 항목
     list_filter = ('gender', 'teacher_id',)

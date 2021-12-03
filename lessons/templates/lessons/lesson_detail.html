@@ -1,0 +1,136 @@
+{% extends 'lessons/base.html' %}
+
+{% block main_area %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card">
+            <img src="/static/img/logo_white.jpg" class="card-img-top" alt="">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>강사</td>
+                            <td><span class="badge bg-success">{{ lesson_object.teacher_id.name }}</span></td>
+                        </tr>
+                        <tr>
+                            <td>수업일</td>
+                            <td>{{ lesson_object.lesson_date }}</td>
+                        </tr>
+                        <tr>
+                            <td>수업시간</td>
+                            <td>{{ lesson_object.lesson_time }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="row">
+            {% for attendance in attendance_objects %}
+            <div class="col-lg">
+                <div class="card mb-4 rounded-3 shadow-sm
+                    {% if attendance.status == 0 %}
+                            border-success
+                        {% elif attendance.status == 1 %}
+                            border-primary
+                        {% elif attendance.status == 2 %}
+                            border-warning
+                        {% elif attendance.status == 3 %}
+                            border-danger
+                        {% endif %}
+                ">
+                    <div class="card-header py-3 text-white
+                        {% if attendance.status == 0 %}
+                            bg-success border-success
+                        {% elif attendance.status == 1 %}
+                            bg-primary border-primary
+                        {% elif attendance.status == 2 %}
+                            bg-warning border-warning
+                        {% elif attendance.status == 3 %}
+                            bg-danger border-danger
+                        {% endif %}
+                    ">
+                        <h4 class="my-0 fw-normal">{{ attendance.member_id.name }} 회원</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tbody>
+                                <tr><td></td><td></td></tr>
+                                <tr>
+
+                                    <td>출석 상태</td>
+                                    <td>
+                                        <span class="badge rounded-pill
+                                            {% if attendance.status == 0 %}
+                                                bg-success
+                                            {% elif attendance.status == 1 %}
+                                                bg-primary
+                                            {% elif attendance.status == 2 %}
+                                                bg-warning
+                                            {% elif attendance.status == 3 %}
+                                                bg-danger
+                                            {% endif %}
+                                        ">
+                                            {{ attendance.get_status_display }}
+                                        </span>
+                                    </td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ul class="list-unstyled mt-3 mb-4">
+                        <li> - 아래 버튼을 눌러 출석 상태를 변경하세요</li>
+                        </ul>
+                        <div class="row">
+                            <div class="col">
+                                <form action="{% url 'manage_attendance' %}" method="post" class="w-20">
+                                    {% csrf_token %}
+                                    <input name="lesson_id" type="hidden" value="{{ lesson_object.id }}">
+                                    <input name="member_id" type="hidden" value="{{ attendance.member_id.name }}">
+                                    <input name="attendance_flag" type="hidden" value="0">
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <button type="submit" class="btn btn-success">수업예정</button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <form action="{% url 'manage_attendance' %}" method="post">
+                                    {% csrf_token %}
+                                    <input name="lesson_id" type="hidden" value="{{ lesson_object.id }}">
+                                    <input name="member_id" type="hidden" value="{{ attendance.member_id.name }}">
+                                    <input name="attendance_flag" type="hidden" value="1">
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <button type="submit" class="btn btn-primary">수업완료</button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <form action="{% url 'manage_attendance' %}" method="post">
+                                    {% csrf_token %}
+                                    <input name="lesson_id" type="hidden" value="{{ lesson_object.id }}">
+                                    <input name="member_id" type="hidden" value="{{ attendance.member_id.name }}">
+                                    <input name="attendance_flag" type="hidden" value="2">
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <button type="submit" class="btn btn-warning">사전취소</button>
+                                </form>
+                            </div>
+                            <div class="col">
+                                <form action="{% url 'manage_attendance' %}" method="post">
+                                    {% csrf_token %}
+                                    <input name="lesson_id" type="hidden" value="{{ lesson_object.id }}">
+                                    <input name="member_id" type="hidden" value="{{ attendance.member_id.name }}">
+                                    <input name="attendance_flag" type="hidden" value="3">
+                                    <input name="next" type="hidden" value="{{ request.path }}">
+                                    <button type="submit" class="btn btn-danger">무단취소</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

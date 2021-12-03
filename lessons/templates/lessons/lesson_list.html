@@ -1,0 +1,28 @@
+{% extends 'lessons/base.html' %}
+
+{% block main_area %}
+
+<h1>수업 목록</h1>
+
+<table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">수업일</th>
+                <th scope="col">수업시간</th>
+                <th scope="col">담당강사</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lesson in lesson_objects %}
+             <tr onClick="location.href='/member/{{ registration.id }}'">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ lesson.lesson_date }}</td>
+                <td>{{ lesson.lesson_time }}</td>
+                <td>{{ lesson.teacher_id.name }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

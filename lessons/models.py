@@ -12,7 +12,7 @@ GENDER_CHOICES = [
 ]
 
 ATTENDANCE_STATUS = [
-    (0, '수업 예정'), (1, '출석'), (2, '무단 취소')
+    (0, '수업 예정'), (1, '수업완료'), (2, '사전 취소'), (3, '무단 취소')
 ]
 
 
@@ -27,8 +27,15 @@ class Lesson(models.Model):
     )
 
     lesson_type = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
-
     input_dtime = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['lesson_date', 'lesson_time', 'teacher_id'],
+                name='unique_lesson',
+            )
+        ]
 
 
 # 출석 관리
@@ -43,17 +50,26 @@ class Attendance(models.Model):
     )
 
     # 출석 상태
-    #   1: 수업 예정
-    #   2: 정상 출석
+    #   0: 수업 예정
+    #   1: 정상 출석
+    #   2: 사전 취소
     #   3: 무단 취소
     status = models.IntegerField(
         choices=ATTENDANCE_STATUS,
         null=True, blank=True,
         validators=[
             MinValueValidator(0),
-            MaxValueValidator(2)
+            MaxValueValidator(3)
         ],
-        default=1
+        default=0
     )
 
     input_dtime = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['lesson_id', 'member_id'],
+                name='unique_lesson_attendance',
+            )
+        ]

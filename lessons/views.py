@@ -1,10 +1,13 @@
 import datetime
 
-from django.shortcuts import render
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.views.generic import CreateView
+
 from .models import Lesson, Attendance, Member
 
 
-# Create your views here.
+#   라일비 프로젝트 메인 페이지, 월 스케쥴
 def index(request):
     lesson_objects = Lesson.objects.all()
 
@@ -41,6 +44,8 @@ def index(request):
         event_sub_arr['start'] = start_dt
         event_sub_arr['end'] = end_dt
 
+        event_sub_arr['lesson_id'] = i.id
+
         event_arr.append(event_sub_arr)
 
     return render(
@@ -51,6 +56,60 @@ def index(request):
             'events': event_arr
         }
     )
+
+
+# Lesson List 페이지
+def list(request):
+    lesson_objects = Lesson.objects.all()
+
+    return render(
+        request,
+        'lessons/lesson_list.html',
+        {
+            'lesson_objects': lesson_objects,
+        }
+    )
+
+# Lesson 상세 페이지, 출석 관리
+def detail(request, lesson_id):
+    try:
+        lesson_object = Lesson.objects.get(id=lesson_id)
+        attendance_objects = Attendance.objects.filter(lesson_id=lesson_id)
+    except:
+        raise Http404("존재하지 않는 수업입니다.")
+    return render(
+        request,
+        'lessons/lesson_detail.html',
+        {
+            'lesson_object': lesson_object,
+            'attendance_objects': attendance_objects
+        }
+    )
+
+
+# 출석관리
+def manage_attendance(request):
+    print("test")
+    lesson_id = request.POST['lesson_id']
+    member_id = request.POST['member_id']
+    attendance_flag = request.POST['attendance_flag']
+    attendance_object = Attendance.objects.get(lesson_id=lesson_id, member_id=member_id)
+    attendance_object.status = attendance_flag
+    attendance_object.save()
+
+    # 원래 페이지로 보내기 위한 변수
+    next = request.POST.get('next', '/')
+
+    return HttpResponseRedirect(next)
+
+class LessonCreate(CreateView):
+    model = Lesson
+    fields = [
+        'lesson_date', 'lesson_time', 'teacher_id',
+    ]
+
+    def form_valid(self, form):
+        return super(LessonCreate, self).form_valid(form)
 
 
 # 시간 계산은 dummy 일자를 붙여 계산한 후 시간 추출하는 방식 사용
