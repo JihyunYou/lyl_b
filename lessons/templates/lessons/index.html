@@ -8,34 +8,32 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
 
-          timeZone: 'Asia/Seoul',
-          locale: 'ko',
-          firstDay: 1,
-          allDaySlot: false,
-          slotMinTime: "06:00:00",
-          contentHeight:"auto",
+            timeZone: 'Asia/Seoul',
+            locale: 'ko',
+            firstDay: 1,
+            allDaySlot: false,
+            slotMinTime: "06:00:00",
+            contentHeight:"auto",
 
-<!--                  themeSystem: 'bootstrap',-->
-
-          headerToolbar: {
-            start: 'dayGridMonth,timeGridWeek,timeGridDay',
-            center: 'title',
-            end: 'today prev,next'
-          },
-
-          events: [
-            {% for i in events %}
-            {
-              id: 'a',
-              title: '{{ i.title }}',
-              url: '/lesson/{{ i.lesson_id }}/',
-              start: '{{ i.start }}',
-              end: '{{ i.end }}'
+            headerToolbar: {
+                start: 'dayGridMonth,timeGridWeek,timeGridDay',
+                center: 'title',
+                end: 'today prev,next'
             },
-            {% endfor %}
-          ],
 
-          initialView: 'timeGridWeek'
+            events: [
+                {% for i in events %}
+                {
+                    id: 'a',
+                    title: '{{ i.title }}',
+                    url: '/lesson/{{ i.lesson_id }}/',
+                    start: '{{ i.start }}',
+                    end: '{{ i.end }}'
+                },
+                {% endfor %}
+            ],
+
+            initialView: 'timeGridWeek'
         });
         calendar.render();
     });
@@ -50,6 +48,5 @@
 </div>
 <div class="py-1"></div>
 <div id='calendar'></div>
-
 
 {% endblock %}
