@@ -1,9 +1,18 @@
 from django.db.models import Max
+from django.forms import ModelForm
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .models import Member, Registration
+
+from lessons.models import Attendance
+
+
+class MemberForm(ModelForm):
+    class Meta:
+        model = Member
+        fields = '__all__'
 
 
 def index(request):
@@ -22,6 +31,14 @@ def detail(request, member_id):
     try:
         member_object = Member.objects.get(pk=member_id)
         registration_objects = Registration.objects.filter(member_id=member_id)
+        attendance_objects = Attendance.objects.filter(member_id=member_id)
+
+        # 회원 정보 수정
+        form = MemberForm(request.POST or None, instance=member_object)
+        if form.is_valid():
+            form.save()
+            return redirect(detail, member_id=member_id)
+
     except:
         raise Http404("존재하지 않는 회원입니다.")
     return render(
@@ -29,7 +46,9 @@ def detail(request, member_id):
         'members/member_detail.html',
         {
             'member_object': member_object,
-            'registration_objects': registration_objects
+            'registration_objects': registration_objects,
+            'attendance_objects': attendance_objects,
+            'form': form,
         }
     )
 

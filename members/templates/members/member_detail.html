@@ -17,7 +17,7 @@
                         </tr>
                         <tr>
                             <th>생년월일</th>
-                            <td>{{ member_object.date_of_birth }}</td>
+                            <td>{{ member_object.date_of_birth | date:"Y-m-d" }}</td>
                         </tr>
                         <tr>
                             <th>전화번호</th>
@@ -53,18 +53,42 @@
                 </table>
                 <div class="row">
                     <div class="col text-start">
-                        <a class="btn btn-success btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button">
-                            <i class="fas fa-pen">&nbsp;&nbsp;정보 수정</i>
+                        <a class="btn btn-success btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button"  data-bs-toggle="modal" data-bs-target="#editMemberModal">
+                            <i class="fas fa-user-edit">&nbsp;&nbsp;정보 수정</i>
                         </a>
                     </div>
                     <div class="col text-end">
                         <!-- Button trigger modal -->
-                        <a class="btn btn-danger btn-sm float-right" href="/member/{{ member_object.id }}/delete" role="button" data-bs-toggle="modal" data-bs-target="#deleteMemberModal">
-                            회원 삭제
+                        <a class="btn btn-danger btn-sm float-right" role="button" data-bs-toggle="modal" data-bs-target="#deleteMemberModal">
+                            <i class="fas fa-user-slash">&nbsp;&nbsp;회원 삭제</i>
                         </a>
                     </div>
 
-                    <!-- Modal -->
+                    <!-- Edit Modal -->
+                    <div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="eidtMemberModalLabel">회원 정보 수정</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                        <table class="table">
+                                            {{ form }}
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                        <button type="submit" class="btn btn-success float-right">적용</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Modal -->
                     <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -88,7 +112,7 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-9">
+    <div class="col-lg-5">
         <div class="card">
             <div class="card-header">
                 회원권 결재 정보
@@ -96,30 +120,59 @@
             <div class="card-body">
                 <div class="text-end">
                     <a class="btn btn-success btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button">
-                        <i class="fas fa-pen">&nbsp;&nbsp;회원 결재 정보 등록</i>
+                        <i class="fas fa-dollar-sign">&nbsp;&nbsp;회원 결재 정보 등록</i>
                     </a>
                 </div>
                 <table class="table table-hover">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">등록 순번</th>
-                            <th scope="col">등록 횟수</th>
                             <th scope="col">등록일</th>
+                            <th scope="col">등록 횟수</th>
                             <th scope="col">수강료</th>
-                            <th scope="col">삭제</th>
+                            <th scope="col">편집</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for registration in registration_objects %}
                          <tr onClick="location.href='/member/{{ registration.member_id.id }}/registration/{{ registration.id }}'">
                             <th scope="row">{{ forloop.counter }}</th>
-                             <td>{{ registration.reg_seq }}</td>
+                            <td>{{ registration.reg_date | date:"Y-m-d" }}</td>
                             <td>{{ registration.times }}</td>
-                            <td>{{ registration.reg_date }}</td>
                             <td>{{ registration.tuition }}</td>
                             <td>
                                 <a class="btn btn-danger btn-sm float-right" href="/member/{{ registration.member_id.id }}/registration/{{ registration.id }}/delete" role="button">삭제</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                회원 출석 정보
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>수업일</th>
+                            <th>출석</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for attendance in attendance_objects %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>
+                                {{ attendance.lesson_id.lesson_date | date:"Y-m-d ( D )"}}
+                            </td>
+                            <td>
+                                {{ attendance.get_status_display }}
                             </td>
                         </tr>
                         {% endfor %}

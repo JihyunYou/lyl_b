@@ -1,10 +1,17 @@
 import datetime
 
+from django.forms import ModelForm
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .models import Lesson, Attendance, Member
+
+
+class LessonForm(ModelForm):
+    class Meta:
+        model = Lesson
+        fields = '__all__'
 
 
 #   라일비 프로젝트 메인 페이지, 월 스케쥴
@@ -70,11 +77,20 @@ def list(request):
         }
     )
 
+
 # Lesson 상세 페이지, 출석 관리
 def detail(request, lesson_id):
     try:
         lesson_object = Lesson.objects.get(id=lesson_id)
         attendance_objects = Attendance.objects.filter(lesson_id=lesson_id)
+
+        # 수업 정보 수정
+        form = LessonForm(request.POST or None, instance=lesson_object)
+        print("test")
+        if form.is_valid():
+            form.save()
+            return redirect(detail, lesson_id=lesson_id)
+
     except:
         raise Http404("존재하지 않는 수업입니다.")
     return render(
@@ -82,7 +98,8 @@ def detail(request, lesson_id):
         'lessons/lesson_detail.html',
         {
             'lesson_object': lesson_object,
-            'attendance_objects': attendance_objects
+            'attendance_objects': attendance_objects,
+            'form': form,
         }
     )
 
@@ -102,6 +119,7 @@ def manage_attendance(request):
 
     return HttpResponseRedirect(next)
 
+
 class LessonCreate(CreateView):
     model = Lesson
     fields = [
@@ -110,6 +128,19 @@ class LessonCreate(CreateView):
 
     def form_valid(self, form):
         return super(LessonCreate, self).form_valid(form)
+
+
+# 수업의 경우 Foreign 키 제약사항으로 출석정보가 함께 삭제 됨
+def delete_lesson(request, lesson_id):
+    try:
+        lesson_object = Lesson.objects.get(pk=lesson_id)
+        # registration_objects = Registration.objects.filter(member_id=member_id)
+        # registration_objects.delete()
+        lesson_object.delete()
+    except:
+        raise Http404("존재하지 않는 수업 일정입니다.")
+
+    return redirect('/lesson/')
 
 
 # 시간 계산은 dummy 일자를 붙여 계산한 후 시간 추출하는 방식 사용

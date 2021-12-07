@@ -19,7 +19,9 @@ REGISTRATION_TYPE = [
 
 # 강습 회원
 class Member(models.Model):
-    name = models.CharField(help_text="회원 이름", max_length=20, null=False)
+    name = models.CharField(
+        # help_text="회원 이름",
+        max_length=20, null=False)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
     date_of_birth = models.DateField(null=True)
 

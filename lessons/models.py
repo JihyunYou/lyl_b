@@ -36,6 +36,7 @@ class Lesson(models.Model):
                 name='unique_lesson',
             )
         ]
+        ordering = ['lesson_date']
 
 
 # 출석 관리
@@ -73,3 +74,4 @@ class Attendance(models.Model):
                 name='unique_lesson_attendance',
             )
         ]
+        ordering = ['lesson_id']

@@ -46,6 +46,7 @@ urlpatterns = [
         'lesson/create_lesson/',
         lessons.views.LessonCreate.as_view(success_url="/lesson/<int:lesson_id>/")
     ),
+    path('lesson/<int:lesson_id>/delete/', lessons.views.delete_lesson),
     path(
         'lesson/manage_attendance/',
         lessons.views.manage_attendance,

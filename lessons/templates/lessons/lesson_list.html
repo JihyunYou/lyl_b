@@ -2,7 +2,9 @@
 
 {% block main_area %}
 
-<h1>수업 목록</h1>
+<div class="text-end">
+    <h1 class="display-6 fw-bold">라일비 수업 목록</h1>
+</div>
 
 <table class="table table-hover">
         <thead>
@@ -15,7 +17,7 @@
         </thead>
         <tbody>
             {% for lesson in lesson_objects %}
-             <tr onClick="location.href='/member/{{ registration.id }}'">
+             <tr onClick="location.href='/lesson/{{ lesson.id }}'">
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ lesson.lesson_date }}</td>
                 <td>{{ lesson.lesson_time }}</td>
