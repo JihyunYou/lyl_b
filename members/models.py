@@ -9,14 +9,17 @@ GENDER_CHOICES = [
     ('m', '남자'), ('f', '여자')
 ]
 
+DAY_LESSON_YN = [
+    (True, '수업 있음'), (False, '수업 없음')
+]
+
 REGISTRATION_TYPE = [
     (1, '첫등록'), (2, '재등록')
 ]
 
 # 강습 회원
 class Member(models.Model):
-    name = models.CharField(help_text="회원 이름", max_length=20, primary_key=True)
-    # name = models.CharField(max_length=20, null=False)
+    name = models.CharField(help_text="회원 이름", max_length=20, null=False)
     gender = models.CharField(choices=GENDER_CHOICES, max_length=1, null=False)
     date_of_birth = models.DateField(null=True)
 
@@ -27,6 +30,19 @@ class Member(models.Model):
         Teacher, related_name="member_teacher", on_delete=models.SET_NULL, db_column="teacher_id",
         null=True
     )
+
+    mon_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    mon_time = models.TimeField(null=True, blank=True)
+    tue_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    tue_time = models.TimeField(null=True, blank=True)
+    wed_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    wed_time = models.TimeField(null=True, blank=True)
+    thu_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    thu_time = models.TimeField(null=True, blank=True)
+    fri_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    fri_time = models.TimeField(null=True, blank=True)
+    sat_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
+    sat_time = models.TimeField(null=True, blank=True)
 
 
 # 등록 관리

@@ -1,10 +1,13 @@
 {% extends 'lessons/base.html' %}
 
 {% block main_area %}
-<h1>회원 관리</h1>
-<a class="btn btn-info btn-sm float-right" href="/member/create_member/" role="button">
-    <i class="fas fa-pen">&nbsp;&nbsp;신규 회원</i>
-</a>
+
+<div class="text-end">
+    <h1 class="display-6 fw-bold">라일비 회원 목록</h1>
+    <a class="btn btn-success btn-sm float-right" href="/member/create_member/" role="button">
+        <i class="fas fa-pen">&nbsp;&nbsp;신규 회원 등록</i>
+    </a>
+</div>
 
 <div>
     <table class="table table-hover">
@@ -13,7 +16,7 @@
                 <th scope="col">#</th>
                 <th scope="col">이름</th>
                 <th scope="col">성별</th>
-                <th scope="col">생일</th>
+                <th scope="col">생년월일</th>
                 <th scope="col">핸드폰 번호</th>
             </tr>
         </thead>
@@ -22,7 +25,7 @@
              <tr onClick="location.href='/member/{{ member.id }}'">
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ member.name }}</td>
-                <td>{{ member.gender }}</td>
+                <td>{{ member.get_gender_display }}</td>
                 <td>{{ member.date_of_birth }}</td>
                 <td>{{ member.phone_number }}</td>
             </tr>

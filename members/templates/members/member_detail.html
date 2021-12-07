@@ -1,39 +1,133 @@
 {% extends 'lessons/base.html' %}
 
 {% block main_area %}
-<div>
-    {{ member_object.name }}
-</div>
 
-<h3>등록 정보</h3>
-<a class="btn btn-info btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button">
-    <i class="fas fa-pen">&nbsp;&nbsp;회원 결재 관리</i>
-</a>
-<div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Member ID</th>
-                <th scope="col">등록 순번</th>
-                <th scope="col">등록 횟수</th>
-                <th scope="col">등록일</th>
-                <th scope="col">수강료</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for registration in registration_objects %}
-             <tr onClick="location.href='/member/{{ registration.id }}'">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ registration.member_id }}</td>
-                 <td>{{ registration.reg_seq }}</td>
-                <td>{{ registration.times }}</td>
-                <td>{{ registration.reg_date }}</td>
-                <td>{{ registration.tuition }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="row">
+    <div class="col-lg-3">
+        <div class="card">
+            <div class="card-header">
+                {{ member_object.name }} 님의 정보입니다
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>성별</th>
+                            <td>{{ member_object.get_gender_display }}</td>
+                        </tr>
+                        <tr>
+                            <th>생년월일</th>
+                            <td>{{ member_object.date_of_birth }}</td>
+                        </tr>
+                        <tr>
+                            <th>전화번호</th>
+                            <td>{{ member_object.phone_number }}</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>월요일 수업</th>
+                            <td>{{ member_object.mon_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>화요일 수업</th>
+                            <td>{{ member_object.tue_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>수요일 수업</th>
+                            <td>{{ member_object.wed_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>목요일 수업</th>
+                            <td>{{ member_object.thu_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>금요일 수업</th>
+                            <td>{{ member_object.fri_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>토요일 수업</th>
+                            <td>{{ member_object.sat_time }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col text-start">
+                        <a class="btn btn-success btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button">
+                            <i class="fas fa-pen">&nbsp;&nbsp;정보 수정</i>
+                        </a>
+                    </div>
+                    <div class="col text-end">
+                        <!-- Button trigger modal -->
+                        <a class="btn btn-danger btn-sm float-right" href="/member/{{ member_object.id }}/delete" role="button" data-bs-toggle="modal" data-bs-target="#deleteMemberModal">
+                            회원 삭제
+                        </a>
+                    </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    회원 삭제시 회원의 결제 정보도 함께 삭제 됩니다.
+                                </div>
+                                <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                                <a class="btn btn-danger float-right" href="/member/{{ member_object.id }}/delete" role="button">
+                                    삭제
+                                </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        <div class="card">
+            <div class="card-header">
+                회원권 결재 정보
+            </div>
+            <div class="card-body">
+                <div class="text-end">
+                    <a class="btn btn-success btn-sm float-right" href="/member/{{ member_object.id }}/create_registration" role="button">
+                        <i class="fas fa-pen">&nbsp;&nbsp;회원 결재 정보 등록</i>
+                    </a>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">등록 순번</th>
+                            <th scope="col">등록 횟수</th>
+                            <th scope="col">등록일</th>
+                            <th scope="col">수강료</th>
+                            <th scope="col">삭제</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registration in registration_objects %}
+                         <tr onClick="location.href='/member/{{ registration.member_id.id }}/registration/{{ registration.id }}'">
+                            <th scope="row">{{ forloop.counter }}</th>
+                             <td>{{ registration.reg_seq }}</td>
+                            <td>{{ registration.times }}</td>
+                            <td>{{ registration.reg_date }}</td>
+                            <td>{{ registration.tuition }}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm float-right" href="/member/{{ registration.member_id.id }}/registration/{{ registration.id }}/delete" role="button">삭제</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock %}

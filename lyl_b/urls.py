@@ -30,6 +30,11 @@ urlpatterns = [
         'member/<int:member_id>/create_registration',
         members.views.RegistrationCreate.as_view(success_url="/member/")
     ),
+    path('member/<int:member_id>/delete/', members.views.delete_member),
+    path(
+        'member/<int:member_id>/registration/<int:registration_id>/delete/',
+        members.views.delete_registration
+    ),
 
     path('lesson/', lessons.views.list, name='lesson_list'),
     path(

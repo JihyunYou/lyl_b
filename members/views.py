@@ -1,5 +1,5 @@
 from django.db.models import Max
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
@@ -8,6 +8,7 @@ from .models import Member, Registration
 
 def index(request):
     member_objects = Member.objects.all()
+
     return render(
         request,
         'members/member_index.html',
@@ -19,7 +20,7 @@ def index(request):
 
 def detail(request, member_id):
     try:
-        member_object = Member.objects.get(id=member_id)
+        member_object = Member.objects.get(pk=member_id)
         registration_objects = Registration.objects.filter(member_id=member_id)
     except:
         raise Http404("존재하지 않는 회원입니다.")
@@ -33,10 +34,37 @@ def detail(request, member_id):
     )
 
 
+def delete_registration(request, member_id, registration_id):
+    try:
+        registration_object = Registration.objects.get(pk=registration_id)
+        registration_object.delete()
+    except:
+        raise Http404("존재하지 않는 결재정보 입니다.")
+
+    return redirect(detail, member_id=member_id)
+
+def delete_member(request, member_id):
+    try:
+        member_object = Member.objects.get(pk=member_id)
+        registration_objects = Registration.objects.filter(member_id=member_id)
+        registration_objects.delete()
+        member_object.delete()
+    except:
+        raise Http404("존재하지 않는 회원입니다.")
+
+    return redirect('/member/')
+
+
 class MemberCreate(CreateView):
     model = Member
     fields = [
-        'name', 'gender', 'date_of_birth', 'phone_number', 'teacher_id'
+        'name', 'gender', 'date_of_birth', 'phone_number', 'teacher_id',
+        'mon_yn', 'mon_time',
+        'tue_yn', 'tue_time',
+        'wed_yn', 'wed_time',
+        'thu_yn', 'thu_time',
+        'fri_yn', 'fri_time',
+        'sat_yn', 'sat_time',
     ]
 
     def form_valid(self, form):
