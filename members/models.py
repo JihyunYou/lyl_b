@@ -46,6 +46,8 @@ class Member(models.Model):
     sat_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
     sat_time = models.TimeField(null=True, blank=True)
 
+    def __str__(self):
+        return  self.name
 
 # 등록 관리
 class Registration(models.Model):

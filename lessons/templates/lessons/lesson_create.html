@@ -1,0 +1,34 @@
+{% extends 'lessons/base.html' %}
+
+{% block main_area %}
+
+{% load crispy_forms_tags %}
+
+<div class="row">
+    <div class="col-lg-2"></div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                라일비 수업 일정 추가
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ lesson_form | crispy }}
+
+                    {{ attendance_formset.management_form }}
+                    {% for form in attendance_formset %}
+                        {{ form|crispy }}
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-success float-right">저장</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-2"></div>
+</div>
+
+{% endblock %}

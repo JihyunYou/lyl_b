@@ -25,7 +25,11 @@ urlpatterns = [
 
     path('member/', members.views.index, name='member_index'),
     path('member/<int:member_id>/', members.views.detail, name='member_detail'),
-    path('member/create_member/', members.views.MemberCreate.as_view(success_url="/member/")),
+    path(
+        'member/create_member/',
+        members.views.create_member,
+        name='create_member'
+    ),
     path(
         'member/<int:member_id>/create_registration',
         members.views.RegistrationCreate.as_view(success_url="/member/")
@@ -44,7 +48,8 @@ urlpatterns = [
     ),
     path(
         'lesson/create_lesson/',
-        lessons.views.LessonCreate.as_view(success_url="/lesson/<int:lesson_id>/")
+        lessons.views.create_manual_schedule,
+        name='lesson_create'
     ),
     path('lesson/<int:lesson_id>/delete/', lessons.views.delete_lesson),
     path(

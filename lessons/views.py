@@ -1,6 +1,7 @@
 import datetime
 
-from django.forms import ModelForm
+from crispy_forms.helper import FormHelper
+from django.forms import ModelForm, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
@@ -9,9 +10,52 @@ from .models import Lesson, Attendance, Member
 
 
 class LessonForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(LessonForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-lg-3'
+        self.helper.field_class = 'col-lg-9'
+
     class Meta:
         model = Lesson
         fields = '__all__'
+        labels = {
+            'lesson_date': '수업 날짜',
+            'lesson_time': '수업 시간',
+            'teacher_id': '담당 강사',
+            'lesson_type': '수업 종류'
+        }
+
+
+class AttendanceForm(ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ['member_id']
+
+
+LessonAttendanceFormset = inlineformset_factory(
+    Lesson,
+    Attendance,
+    form=AttendanceForm,
+    max_num=2,
+    min_num=1,
+    labels={
+            'member_id': '회원명'
+        }
+)
+
+
+class LessonCreate(CreateView):
+    model = Lesson
+    fields = [
+        'lesson_date', 'lesson_time', 'teacher_id', 'lesson_type',
+    ]
+
+    def form_valid(self, form):
+        return super(LessonCreate, self).form_valid(form)
+
+    # return redirect(detail, lesson_id=model.id)
 
 
 #   라일비 프로젝트 메인 페이지, 월 스케쥴
@@ -44,7 +88,7 @@ def index(request):
         ).strftime("%Y-%m-%d %H:%M:%S")
 
         end_dt = datetime.datetime.strptime(
-            str(i.lesson_date) + ' ' + str(calEndTime(i.lesson_time)),
+            str(i.lesson_date) + ' ' + str(cal_end_time(i.lesson_time)),
             "%Y-%m-%d %H:%M:%S"
         ).strftime("%Y-%m-%d %H:%M:%S")
 
@@ -104,6 +148,35 @@ def detail(request, lesson_id):
     )
 
 
+# 기본 스케쥴 생성
+def create_default_schedule(request):
+    member_objects = Member.objects.all()
+    return redirect('')
+
+
+def create_manual_schedule(request):
+    lesson_form = LessonForm
+    attendance_formset = LessonAttendanceFormset
+
+    if request.POST:
+        lesson_form = LessonForm(request.POST)
+        if lesson_form.is_valid():
+            lesson = lesson_form.save()
+            attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
+            if attendance_formset.is_valid():
+                attendance_formset.save()
+            return redirect('/')
+
+    return render(
+        request,
+        'lessons/lesson_create.html',
+        {
+            'lesson_form': lesson_form,
+            'attendance_formset': attendance_formset,
+        }
+    )
+
+
 # 출석관리
 def manage_attendance(request):
     print("test")
@@ -120,16 +193,6 @@ def manage_attendance(request):
     return HttpResponseRedirect(next)
 
 
-class LessonCreate(CreateView):
-    model = Lesson
-    fields = [
-        'lesson_date', 'lesson_time', 'teacher_id',
-    ]
-
-    def form_valid(self, form):
-        return super(LessonCreate, self).form_valid(form)
-
-
 # 수업의 경우 Foreign 키 제약사항으로 출석정보가 함께 삭제 됨
 def delete_lesson(request, lesson_id):
     try:
@@ -144,7 +207,7 @@ def delete_lesson(request, lesson_id):
 
 
 # 시간 계산은 dummy 일자를 붙여 계산한 후 시간 추출하는 방식 사용
-def calEndTime(start_time):
+def cal_end_time(start_time):
     end_time = datetime.datetime(100, 1, 1, start_time.hour, start_time.minute, start_time.second)
     end_time = end_time + datetime.timedelta(minutes=50)
     return end_time.time()

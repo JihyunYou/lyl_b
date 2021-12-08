@@ -1,3 +1,7 @@
+from crispy_forms.bootstrap import InlineRadios
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit, Layout, Div
+from django import forms
 from django.db.models import Max
 from django.forms import ModelForm
 from django.http import Http404, HttpResponseRedirect
@@ -5,14 +9,37 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
 from .models import Member, Registration
-
 from lessons.models import Attendance
+from custom_users.models import User
 
 
+class CustomMemberForm(forms.Form):
+    name = forms.CharField(max_length=20, required=True)
+    teacher_id = forms.ModelMultipleChoiceField(
+        widget=forms.SelectMultiple(), queryset=User.objects.filter(user_grade=3))
+
+
+# member form 초기 설정 (crispy)
 class MemberForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(MemberForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_class = 'form-horizontal'
+        self.helper.label_class = 'col-3'
+        self.helper.field_class = 'col-9'
+        self.helper.add_input(Submit('submit', '등록', css_class='btn-success'))
+        self.helper.form_method = 'POST'
+
     class Meta:
         model = Member
         fields = '__all__'
+        labels = {
+            'name': '이름',
+            'gender': '성별',
+            'date_of_birth': '생년월일',
+            'phone_number': '전화번호',
+            'teacher_id': '담당강사'
+        }
 
 
 def index(request):
@@ -62,6 +89,7 @@ def delete_registration(request, member_id, registration_id):
 
     return redirect(detail, member_id=member_id)
 
+
 def delete_member(request, member_id):
     try:
         member_object = Member.objects.get(pk=member_id)
@@ -72,6 +100,24 @@ def delete_member(request, member_id):
         raise Http404("존재하지 않는 회원입니다.")
 
     return redirect('/member/')
+
+
+def create_member(request):
+    member_form = MemberForm
+
+    if request.POST:
+        member_form = MemberForm(request.POST)
+        if member_form.is_valid():
+            member = member_form.save()
+            return redirect(detail, member_id=member.id)
+
+    return render(
+        request,
+        'members/member_create.html',
+        {
+            'member_form': member_form
+        }
+    )
 
 
 class MemberCreate(CreateView):
