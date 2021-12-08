@@ -76,6 +76,7 @@ def detail(request, member_id):
             'registration_objects': registration_objects,
             'attendance_objects': attendance_objects,
             'form': form,
+            'remaining_count': cal_remaining(member_id)
         }
     )
 
@@ -119,6 +120,19 @@ def create_member(request):
         }
     )
 
+
+def cal_remaining(member_id):
+    total_count = 0
+    registration_objects = Registration.objects.filter(member_id=member_id)
+    for registration in registration_objects:
+        total_count += registration.times
+
+    attendance_objects = Attendance.objects.filter(member_id=member_id)
+    for attendance in attendance_objects:
+        if attendance.status == 1 or attendance.status == 3:
+            total_count -= 1
+
+    return total_count
 
 class MemberCreate(CreateView):
     model = Member
