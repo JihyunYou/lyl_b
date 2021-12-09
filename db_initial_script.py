@@ -40,62 +40,315 @@ registration = Registration.objects.create(
     reg_date='2021-11-01',
     tuition=500000
 )
-member = Member(name='¹ÚÁöÀº',	gender='f',	phone_number='01074767512')
-member.save()
-member = Member(name='¼º±âÈÆ',	gender='m',	phone_number='01052072025')
-member.save()
-member = Member(name='±è¿¬°æ',	gender='f',	phone_number='01053760506')
-member.save()
-member = Member(name='ÀÓÈ£¿¬',	gender='f',	phone_number='01068185770')
-member.save()
-member = Member(name='¼º¹ÎÁÖ',	gender='f',	phone_number='01033516853')
-member.save()
-member = Member(name='ÀÌÀÎ¿ë',	gender='m',	phone_number='01033497073')
-member.save()
-member = Member(name='¾È¼­Çö',	gender='f',	phone_number='01075775889')
-member.save()
-member = Member(name='¿À¼öÁ¤',	gender='f',	phone_number='01095761819')
-member.save()
-member = Member(name='ÃÖÁØ¼®',	gender='m',	phone_number='01046173396')
-member.save()
-member = Member(name='°­Á¤±İ',	gender='m',	phone_number='01039992266')
-member.save()
-member = Member(name='½Å»óÀÏ',	gender='m',	phone_number='01021082500')
-member.save()
-member = Member(name='±èÀº»ó',	gender='f',	phone_number='01041116704')
-member.save()
-member = Member(name='°ûµµÇö',	gender='f',	phone_number='01029356123')
-member.save()
-member = Member(name='ÇöÁÖ',	gender='m', phone_number='01053265409')
-member.save()
-member = Member(name='È£¿µ',	gender='f', phone_number='01053265409')
-member.save()
-member = Member(name='À±Á¤¼ö',	gender='f',	phone_number='01046777244')
-member.save()
-member = Member(name='À±¹Î¾Æ',	gender='f',	phone_number='01089140201')
-member.save()
-member = Member(name='°­¹ÎÈñ',	gender='f',	phone_number='01090109146')
-member.save()
-member = Member(name='±èÀº¾Ö',	gender='f',	phone_number='01026303003')
-member.save()
-member = Member(name='±èÀºÁÖ',	gender='f',	phone_number='01096952858')
-member.save()
-member = Member(name='ÀÓÁöÀº',	gender='f',	phone_number='01099921479')
-member.save()
-member = Member(name='¹ÚÁ¤¼ø',	gender='f',	phone_number='01089215041')
-member.save()
-member = Member(name='À±ÁøÈñ',	gender='f',	phone_number='01050242126')
-member.save()
-member = Member(name='Â÷Á¤À±',	gender='f',	phone_number='01071265784')
-member.save()
-member = Member(name='ÀÌÁØÈÖ',	gender='m',	phone_number='01056567270')
-member.save()
-member = Member(name='È«¼­¿¬',	gender='f',	phone_number='01099244732')
-member.save()
-member = Member(name='À±´Ù¿µ',	gender='m',	phone_number='0109189316')
-member.save()
-member = Member(name='¹ÎÀºÁÖ',	gender='f',	phone_number='01085292817')
-member.save()
+
+member = Member.objects.create(
+    name='¹ÚÁöÀº',	gender='f',	phone_number='01074767512',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¼º±âÈÆ',	gender='m',	phone_number='01052072025',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='±è¿¬°æ',	gender='f',	phone_number='01053760506',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÀÓÈ£¿¬',	gender='f',	phone_number='01068185770',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¼º¹ÎÁÖ',	gender='f',	phone_number='01033516853',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÀÌÀÎ¿ë',	gender='m',	phone_number='01033497073',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¾È¼­Çö',	gender='f',	phone_number='01075775889',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¿À¼öÁ¤',	gender='f',	phone_number='01095761819',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÃÖÁØ¼®',	gender='m',	phone_number='01046173396',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='°­Á¤±İ',	gender='m',	phone_number='01039992266',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='½Å»óÀÏ',	gender='m',	phone_number='01021082500',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='±èÀº»ó',	gender='f',	phone_number='01041116704',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='°ûµµÇö',	gender='f',	phone_number='01029356123',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÇöÁÖ',	gender='m', phone_number='01053265409',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='È£¿µ',	gender='f', phone_number='01053265409',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='À±Á¤¼ö',	gender='f',	phone_number='01046777244',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='À±¹Î¾Æ',	gender='f',	phone_number='01089140201',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='°­¹ÎÈñ',	gender='f',	phone_number='01090109146',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='±èÀº¾Ö',	gender='f',	phone_number='01026303003',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='±èÀºÁÖ',	gender='f',	phone_number='01096952858',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÀÓÁöÀº',	gender='f',	phone_number='01099921479',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¹ÚÁ¤¼ø',	gender='f',	phone_number='01089215041',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='À±ÁøÈñ',	gender='f',	phone_number='01050242126',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='Â÷Á¤À±',	gender='f',	phone_number='01071265784',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='ÀÌÁØÈÖ',	gender='m',	phone_number='01056567270',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='È«¼­¿¬',	gender='f',	phone_number='01099244732',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='À±´Ù¿µ',	gender='m',	phone_number='0109189316',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
+member = Member.objects.create(
+    name='¹ÎÀºÁÖ',	gender='f',	phone_number='01085292817',
+    teacher_id=user
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
+
 
 
 # ¼ö¾÷ »ı¼º
