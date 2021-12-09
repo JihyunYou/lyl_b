@@ -26,8 +26,20 @@ user.phone_number = '01042003190'
 user.save()
 
 # 회원 생성
-member = Member(name='김나영',	gender='f',	phone_number='01089839767')
-member.save()
+member = Member.objects.create(
+    name='김나영',
+    gender='f',
+    phone_number='01089839767',
+    teacher_id=user,
+    tue_yn=True,
+    tue_time='16:00'
+)
+registration = Registration.objects.create(
+    member_id=member,
+    times=10,
+    reg_date='2021-11-01',
+    tuition=500000
+)
 member = Member(name='박지은',	gender='f',	phone_number='01074767512')
 member.save()
 member = Member(name='성기훈',	gender='m',	phone_number='01052072025')
