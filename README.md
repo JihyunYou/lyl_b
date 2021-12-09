@@ -1,5 +1,5 @@
-# lyl_b
-## Management for LYL.B pilates
+# lyl_b: 라일비
+## Management Webpage for LYL.B pilates
 
 ###기능 리스트
 1. 수업 스케쥴표
@@ -11,12 +11,24 @@
    - 수업의 회원 등록, 조회, 수정
    - 각 수업의 회원 출결 상태 관리
 
-''' python
-Initial Command
+-----
+
+###Initial Command
+1. requirements 파일로 필요 페키지 설치
+```python
 pip install -r requirements.txt
+```
+2. DB Migration
+```python
 python manage.py makemigrations
 python manage.py migrate
+```
+3. 기본 데이터 입력
+```python
 python manage.py shell < db_initial_script.py
+```
+4. 실행
+```python
 python manage.py runserver
 ngrok.exe http 8000
-'''
+```
