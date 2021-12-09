@@ -30,10 +30,6 @@ urlpatterns = [
         members.views.create_member,
         name='create_member'
     ),
-    path(
-        'member/<int:member_id>/create_registration',
-        members.views.RegistrationCreate.as_view(success_url="/member/")
-    ),
     path('member/<int:member_id>/delete/', members.views.delete_member),
     path(
         'member/<int:member_id>/registration/<int:registration_id>/delete/',
@@ -45,6 +41,11 @@ urlpatterns = [
         'lesson/<int:lesson_id>/',
         lessons.views.detail,
         name='lesson_detail'
+    ),
+    path(
+        'lesson/create_lesson/auto',
+        lessons.views.create_default_schedule,
+        name='lesson_create_auto'
     ),
     path(
         'lesson/create_lesson/',

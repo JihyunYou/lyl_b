@@ -116,6 +116,15 @@
                         <h5 class="my-0 fw-normal">{{ attendance.member_id.name }} 회원</h5>
                     </div>
                     <div class="card-body">
+                        <div class="form-inline text-end">
+                            <div class="form-group">
+                                <label>회원 상세 정보 페이지로 </label>
+
+                                <a class="btn btn-success btn-sm float-right" href="/member/{{ attendance.member_id.id }}" role="button">
+                                    <i class="fas fa-search">&nbsp;&nbsp;이동</i>
+                                </a>
+                            </div>
+                        </div>
                         <table class="table">
                             <tbody>
                                 <tr><td></td><td></td></tr>

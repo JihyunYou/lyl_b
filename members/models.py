@@ -65,6 +65,9 @@ class Registration(models.Model):
 
     input_dtime = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['reg_date']
+
     def __str__(self):
         """String for representing the Model object."""
         # return Member(primary_key=self.member_id).name

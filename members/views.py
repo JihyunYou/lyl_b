@@ -42,6 +42,20 @@ class MemberForm(ModelForm):
         }
 
 
+# registration form 초기 설정
+class RegistrationFrom(ModelForm):
+    class Meta:
+        model = Registration
+        fields = [
+            'times', 'tuition', 'reg_date'
+        ]
+        labels = {
+            'times': '등록 횟수',
+            'tuition': '결제 금액',
+            'reg_date': '결제 일자',
+        }
+
+
 def index(request):
     member_objects = Member.objects.all()
 
@@ -66,6 +80,14 @@ def detail(request, member_id):
             form.save()
             return redirect(detail, member_id=member_id)
 
+        # 회원권 등록
+        registration_form = RegistrationFrom(request.POST or None)
+        if registration_form.is_valid():
+            registration = registration_form.save(commit=False)
+            registration.member_id = member_object
+            registration.save()
+            return redirect(detail, member_id=member_id)
+
     except:
         raise Http404("존재하지 않는 회원입니다.")
     return render(
@@ -76,6 +98,7 @@ def detail(request, member_id):
             'registration_objects': registration_objects,
             'attendance_objects': attendance_objects,
             'form': form,
+            'registration_form': registration_form,
             'remaining_count': cal_remaining(member_id)
         }
     )
@@ -151,17 +174,3 @@ class MemberCreate(CreateView):
 
     # def get_success_url(self):
     #     return redirect('/member/')
-
-
-class RegistrationCreate(CreateView):
-    model = Registration
-    fields = [
-        'times', 'reg_date', 'tuition'
-    ]
-
-    def form_valid(self, form, **kwargs):
-        member_object = Member.objects.get(id=self.kwargs['member_id'])
-        form.instance.member_id = member_object
-        # form.instance.reg_seq = Registration.objects.filter(member_id=self.kwargs['member_id']).aggregate(Max('reg_seq')) + 1
-
-        return super(RegistrationCreate, self).form_valid(form)

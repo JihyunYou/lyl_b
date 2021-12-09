@@ -8,12 +8,38 @@
     <div class="col-lg-2"></div>
 
     <div class="col-lg-8">
+        <form action="auto" method="post">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="schedule_date" id="datePicker" class="form-control" autocomplete="off" placeholder="일정을 생성할 주의 날짜 선택" required>
+                <button type="submit" class="btn btn-success"><i class="fas fa-calendar-plus">&nbsp;&nbsp;기본 일정 자동 등록</i></button>
+            </div>
+        </form>
+        <script>
+            $('#datePicker').datepicker({
+                format: "yyyy-mm-dd",
+                language: "ko",
+                autoclose: true,
+                clearBtn : true,
+                weekStart : 1
+            });
+            </script>
+        <br>
+
         <div class="card">
             <div class="card-header">
                 라일비 수업 일정 추가
             </div>
             <div class="card-body">
                 <form method="post">
+                    {% if error %}
+                        <div class="alert alert-block alert-danger">
+                            <ul class="m-0">
+                                <li>{{ error }}</li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
                     {% csrf_token %}
                     {{ lesson_form | crispy }}
 
@@ -22,7 +48,7 @@
                         {{ form|crispy }}
                     {% endfor %}
 
-                    <button type="submit" class="btn btn-success float-right">저장</button>
+                    <button type="submit" class="btn btn-success float-right">등록</button>
                 </form>
             </div>
         </div>

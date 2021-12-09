@@ -1,11 +1,13 @@
 import datetime
 
 from crispy_forms.helper import FormHelper
+from django import forms
 from django.forms import ModelForm, inlineformset_factory
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
+from custom_users.models import User
 from .models import Lesson, Attendance, Member
 
 
@@ -41,8 +43,8 @@ LessonAttendanceFormset = inlineformset_factory(
     max_num=2,
     min_num=1,
     labels={
-            'member_id': '회원명'
-        }
+        'member_id': '회원명'
+    }
 )
 
 
@@ -151,17 +153,128 @@ def detail(request, lesson_id):
 # 기본 스케쥴 생성
 def create_default_schedule(request):
     member_objects = Member.objects.all()
-    return redirect('')
+
+    if request.POST:
+        input_date = request.POST.get('schedule_date')
+        input_date = datetime.datetime.strptime(input_date, '%Y-%m-%d').date()
+
+        start_date = input_date + datetime.timedelta(days=-1*input_date.weekday())
+        end_date = start_date + datetime.timedelta(days=5)
+        print("시작일: " + str(start_date))
+        print("종료일: " + str(end_date))
+
+        for member in member_objects:
+            try:
+                if member.mon_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.mon_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+                elif member.tue_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.tue_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+                elif member.wed_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.wed_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+                elif member.thu_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.thu_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+                elif member.fri_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.fri_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+                elif member.sat_yn:
+                    # 수업 생성, 이미 수업 일정이 있다면 Get
+                    lesson, created = Lesson.objects.get_or_create(
+                        lesson_date=start_date,
+                        lesson_time=member.sat_time,
+                        teacher_id=User.objects.get(pk=member.teacher_id.id)
+                    )
+
+                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
+                    attendance, created = Attendance.objects.get_or_create(
+                        lesson_id=lesson,
+                        member_id=member,
+                    )
+
+            except:
+                return HttpResponse("error")
+                # lesson_form = LessonForm
+                # attendance_formset = LessonAttendanceFormset
+                # context = {'lesson_form': lesson_form, 'attendance_formset': attendance_formset}
+
+
+    return redirect('/')
 
 
 def create_manual_schedule(request):
     lesson_form = LessonForm
     attendance_formset = LessonAttendanceFormset
+    context = {'lesson_form': lesson_form, 'attendance_formset': attendance_formset}
 
     if request.POST:
         lesson_form = LessonForm(request.POST)
         if lesson_form.is_valid():
-            lesson = lesson_form.save()
+            lesson = lesson_form.save(commit=False)
+
+            # 스케쥴 시간 체크
+            #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
+            if not check_lesson_schedule(lesson):
+                context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
+                return render(
+                    request,
+                    'lessons/lesson_create.html',
+                    context
+                )
+
+            lesson.save()
             attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
             if attendance_formset.is_valid():
                 attendance_formset.save()
@@ -204,6 +317,25 @@ def delete_lesson(request, lesson_id):
         raise Http404("존재하지 않는 수업 일정입니다.")
 
     return redirect('/lesson/')
+
+
+# 겹치는 수업 시간 체크
+def check_lesson_schedule(lesson):
+    ex_lesson_objects = Lesson.objects.filter(
+        teacher_id=lesson.teacher_id,
+        lesson_date=lesson.lesson_date,
+    )
+
+    result = True
+
+    for ex_lesson in ex_lesson_objects:
+        if ex_lesson.lesson_time <= lesson.lesson_time <= cal_end_time(ex_lesson.lesson_time):
+            result = False
+
+        if ex_lesson.lesson_time <= cal_end_time(lesson.lesson_time) <= cal_end_time(ex_lesson.lesson_time):
+            result = False
+
+    return result
 
 
 # 시간 계산은 dummy 일자를 붙여 계산한 후 시간 추출하는 방식 사용
