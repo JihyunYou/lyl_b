@@ -178,10 +178,10 @@ def create_default_schedule(request):
                         lesson_id=lesson,
                         member_id=member,
                     )
-                elif member.tue_yn:
+                if member.tue_yn:
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
+                        lesson_date=start_date + datetime.timedelta(days=1),
                         lesson_time=member.tue_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )
@@ -191,10 +191,10 @@ def create_default_schedule(request):
                         lesson_id=lesson,
                         member_id=member,
                     )
-                elif member.wed_yn:
+                if member.wed_yn:
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
+                        lesson_date=start_date + datetime.timedelta(days=2),
                         lesson_time=member.wed_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )
@@ -204,10 +204,10 @@ def create_default_schedule(request):
                         lesson_id=lesson,
                         member_id=member,
                     )
-                elif member.thu_yn:
+                if member.thu_yn:
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
+                        lesson_date=start_date + datetime.timedelta(days=3),
                         lesson_time=member.thu_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )
@@ -217,10 +217,10 @@ def create_default_schedule(request):
                         lesson_id=lesson,
                         member_id=member,
                     )
-                elif member.fri_yn:
+                if member.fri_yn:
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
+                        lesson_date=start_date + datetime.timedelta(days=4),
                         lesson_time=member.fri_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )
@@ -230,10 +230,10 @@ def create_default_schedule(request):
                         lesson_id=lesson,
                         member_id=member,
                     )
-                elif member.sat_yn:
+                if member.sat_yn:
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
+                        lesson_date=start_date + datetime.timedelta(days=5),
                         lesson_time=member.sat_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )

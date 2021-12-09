@@ -29,30 +29,42 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% if member.object.mon_yn %}
                         <tr>
                             <th>월요일 수업</th>
                             <td>{{ member_object.mon_time }}</td>
                         </tr>
+                        {% endif %}
+                        {% if member_object.tue_yn %}
                         <tr>
                             <th>화요일 수업</th>
                             <td>{{ member_object.tue_time }}</td>
                         </tr>
+                        {% endif %}
+                        {% if member_object.wed_yn %}
                         <tr>
                             <th>수요일 수업</th>
                             <td>{{ member_object.wed_time }}</td>
                         </tr>
+                        {% endif %}
+                        {% if member_object.thu_yn %}
                         <tr>
                             <th>목요일 수업</th>
                             <td>{{ member_object.thu_time }}</td>
                         </tr>
+                        {% endif %}
+                        {% if member_object.fri_yn %}
                         <tr>
                             <th>금요일 수업</th>
                             <td>{{ member_object.fri_time }}</td>
                         </tr>
+                        {% endif %}
+                        {% if member_object.sat_yn %}
                         <tr>
                             <th>토요일 수업</th>
                             <td>{{ member_object.sat_time }}</td>
                         </tr>
+                        {% endif %}
                     </tbody>
                 </table>
                 <div class="row">

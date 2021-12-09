@@ -8,8 +8,8 @@ from lessons.models import Lesson, Attendance
 
 # °ü¸®ÀÚ °èÁ¤
 user = User.objects.create_superuser('À¯ÁöÇö', password='000000')
-user.is_admin=True
-user.is_active=True
+user.is_admin = True
+user.is_active = True
 user.user_grade = 1
 user.gender = 'm'
 user.date_of_birth = '1990-01-06'
@@ -17,8 +17,8 @@ user.phone_number = '01031521438'
 user.save()
 
 user = User.objects.create_superuser('ºù¹Î¾Æ', password='000000')
-user.is_admin=True
-user.is_active=True
+user.is_admin = True
+user.is_active = True
 user.user_grade = 3
 user.gender = 'f'
 user.date_of_birth = '1989-02-20'
@@ -31,8 +31,8 @@ member = Member.objects.create(
     gender='f',
     phone_number='01089839767',
     teacher_id=user,
-    tue_yn=True,
-    tue_time='16:00'
+    mon_yn=True, mon_time='11:40',
+    wed_yn=True, wed_time='11:40',
 )
 registration = Registration.objects.create(
     member_id=member,
@@ -42,7 +42,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¹ÚÁöÀº',	gender='f',	phone_number='01074767512',
+    name='¹ÚÁöÀº', gender='f', phone_number='01074767512',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -53,7 +53,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¼º±âÈÆ',	gender='m',	phone_number='01052072025',
+    name='¼º±âÈÆ', gender='m', phone_number='01052072025',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -64,7 +64,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='±è¿¬°æ',	gender='f',	phone_number='01053760506',
+    name='±è¿¬°æ', gender='f', phone_number='01053760506',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -75,7 +75,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÀÓÈ£¿¬',	gender='f',	phone_number='01068185770',
+    name='ÀÓÈ£¿¬', gender='f', phone_number='01068185770',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -86,7 +86,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¼º¹ÎÁÖ',	gender='f',	phone_number='01033516853',
+    name='¼º¹ÎÁÖ', gender='f', phone_number='01033516853',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -97,7 +97,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÀÌÀÎ¿ë',	gender='m',	phone_number='01033497073',
+    name='ÀÌÀÎ¿ë', gender='m', phone_number='01033497073',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -108,7 +108,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¾È¼­Çö',	gender='f',	phone_number='01075775889',
+    name='¾È¼­Çö', gender='f', phone_number='01075775889',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -119,7 +119,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¿À¼öÁ¤',	gender='f',	phone_number='01095761819',
+    name='¿À¼öÁ¤', gender='f', phone_number='01095761819',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -130,7 +130,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÃÖÁØ¼®',	gender='m',	phone_number='01046173396',
+    name='ÃÖÁØ¼®', gender='m', phone_number='01046173396',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -141,7 +141,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='°­Á¤±İ',	gender='m',	phone_number='01039992266',
+    name='°­Á¤±İ', gender='m', phone_number='01039992266',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -152,7 +152,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='½Å»óÀÏ',	gender='m',	phone_number='01021082500',
+    name='½Å»óÀÏ', gender='m', phone_number='01021082500',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -163,7 +163,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='±èÀº»ó',	gender='f',	phone_number='01041116704',
+    name='±èÀº»ó', gender='f', phone_number='01041116704',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -174,7 +174,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='°ûµµÇö',	gender='f',	phone_number='01029356123',
+    name='°ûµµÇö', gender='f', phone_number='01029356123',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -185,7 +185,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÇöÁÖ',	gender='m', phone_number='01053265409',
+    name='ÇöÁÖ', gender='m', phone_number='01053265409',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -196,7 +196,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='È£¿µ',	gender='f', phone_number='01053265409',
+    name='È£¿µ', gender='f', phone_number='01053265409',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -207,7 +207,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='À±Á¤¼ö',	gender='f',	phone_number='01046777244',
+    name='À±Á¤¼ö', gender='f', phone_number='01046777244',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -218,7 +218,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='À±¹Î¾Æ',	gender='f',	phone_number='01089140201',
+    name='À±¹Î¾Æ', gender='f', phone_number='01089140201',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -229,7 +229,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='°­¹ÎÈñ',	gender='f',	phone_number='01090109146',
+    name='°­¹ÎÈñ', gender='f', phone_number='01090109146',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -240,7 +240,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='±èÀº¾Ö',	gender='f',	phone_number='01026303003',
+    name='±èÀº¾Ö', gender='f', phone_number='01026303003',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -251,7 +251,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='±èÀºÁÖ',	gender='f',	phone_number='01096952858',
+    name='±èÀºÁÖ', gender='f', phone_number='01096952858',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -262,7 +262,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÀÓÁöÀº',	gender='f',	phone_number='01099921479',
+    name='ÀÓÁöÀº', gender='f', phone_number='01099921479',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -273,7 +273,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¹ÚÁ¤¼ø',	gender='f',	phone_number='01089215041',
+    name='¹ÚÁ¤¼ø', gender='f', phone_number='01089215041',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -284,7 +284,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='À±ÁøÈñ',	gender='f',	phone_number='01050242126',
+    name='À±ÁøÈñ', gender='f', phone_number='01050242126',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -295,7 +295,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='Â÷Á¤À±',	gender='f',	phone_number='01071265784',
+    name='Â÷Á¤À±', gender='f', phone_number='01071265784',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -306,7 +306,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='ÀÌÁØÈÖ',	gender='m',	phone_number='01056567270',
+    name='ÀÌÁØÈÖ', gender='m', phone_number='01056567270',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -317,7 +317,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='È«¼­¿¬',	gender='f',	phone_number='01099244732',
+    name='È«¼­¿¬', gender='f', phone_number='01099244732',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -328,7 +328,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='À±´Ù¿µ',	gender='m',	phone_number='0109189316',
+    name='À±´Ù¿µ', gender='m', phone_number='0109189316',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -339,7 +339,7 @@ registration = Registration.objects.create(
 )
 
 member = Member.objects.create(
-    name='¹ÎÀºÁÖ',	gender='f',	phone_number='01085292817',
+    name='¹ÎÀºÁÖ', gender='f', phone_number='01085292817',
     teacher_id=user
 )
 registration = Registration.objects.create(
@@ -348,8 +348,6 @@ registration = Registration.objects.create(
     reg_date='2021-11-01',
     tuition=500000
 )
-
-
 
 # ¼ö¾÷ »ı¼º
 lesson = Lesson(
