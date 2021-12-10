@@ -17,6 +17,10 @@ REGISTRATION_TYPE = [
     (1, '첫등록'), (2, '재등록')
 ]
 
+MEMBER_STATUS = [
+    (1, '수강 중'), (2, '중지'), (3, '만료')
+]
+
 # 강습 회원
 class Member(models.Model):
     name = models.CharField(
@@ -32,6 +36,8 @@ class Member(models.Model):
         Teacher, related_name="member_teacher", on_delete=models.SET_NULL, db_column="teacher_id",
         null=True
     )
+
+    status = models.IntegerField(choices=MEMBER_STATUS, default=1)
 
     mon_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
     mon_time = models.TimeField(null=True, blank=True)

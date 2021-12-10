@@ -24,6 +24,10 @@
                             <td>{{ member_object.phone_number }}</td>
                         </tr>
                         <tr>
+                            <th>회원권</th>
+                            <td>{{ member_object.get_status_display }}</td>
+                        </tr>
+                        <tr>
                             <th>잔여횟수</th>
                             <td>{{ remaining_count }} 회</td>
                         </tr>

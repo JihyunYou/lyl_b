@@ -60,28 +60,30 @@ class LessonCreate(CreateView):
     # return redirect(detail, lesson_id=model.id)
 
 
-#   라일비 프로젝트 메인 페이지, 월 스케쥴
-def index(request):
-    lesson_objects = Lesson.objects.all()
-
+def get_all_events():
     event_arr = []
-    # if request.Get:
-    #     event_arr = []
-    # if request.GET.get('event_type') == "all":
-    #     all_events = Events.objects.all()
-    # else:
-    #     all_events = Events.objects.filter(event_type__icontains=request.GET.get('event_type'))
 
+    lesson_objects = Lesson.objects.all()
     for i in lesson_objects:
         event_sub_arr = {}
         attendance_objects = Attendance.objects.filter(lesson_id=i.id).select_related("member_id")
         # title
+        #   수강 회원명, 수업 상태
         str_title = ''
         for j, val in enumerate(attendance_objects):
             if j != 0:
                 str_title += ', '
             str_title += str(val.member_id.name)
+        str_title += ' [' + val.get_status_display() + ']'
         event_sub_arr['title'] = str_title
+
+        # Event Color 설정
+        #   수업예정: #198754
+        #   수업완료: #0d6dfd
+        #   사전취소: #ffc107
+        #   당일취소: #dc3546
+        color_array =['#198754', '#0d6dfd', '#ffc107', '#dc3546']
+        event_sub_arr['color'] = color_array[val.status]
 
         # start, end
         start_dt = datetime.datetime.strptime(
@@ -101,13 +103,43 @@ def index(request):
 
         event_arr.append(event_sub_arr)
 
+    return event_arr
+
+
+#   라일비 프로젝트 메인 페이지, 월 스케쥴
+def index(request):
+    # Form
+    lesson_form = LessonForm
+    attendance_formset = LessonAttendanceFormset
+
+    # Context
+    context = {}
+
+    # 일정 생성
+    if request.POST:
+        lesson_form = LessonForm(request.POST)
+
+        if lesson_form.is_valid():
+            lesson = lesson_form.save(commit=False)
+
+            # 스케쥴 시간 체크
+            #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
+            if check_lesson_schedule(lesson):   # 이상 없는 경우
+                lesson.save()
+                attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
+                if attendance_formset.is_valid():
+                    attendance_formset.save()
+            else:
+                context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
+
+    context['lesson_form'] = lesson_form
+    context['attendance_formset'] = attendance_formset
+    context['events'] = get_all_events
+
     return render(
         request,
         'lessons/index.html',
-        {
-            'lesson_objects': lesson_objects,
-            'events': event_arr
-        }
+        context
     )
 
 
@@ -152,13 +184,13 @@ def detail(request, lesson_id):
 
 # 기본 스케쥴 생성
 def create_default_schedule(request):
-    member_objects = Member.objects.all()
+    member_objects = Member.objects.filter(status=1)
 
     if request.POST:
         input_date = request.POST.get('schedule_date')
         input_date = datetime.datetime.strptime(input_date, '%Y-%m-%d').date()
 
-        start_date = input_date + datetime.timedelta(days=-1*input_date.weekday())
+        start_date = input_date + datetime.timedelta(days=-1 * input_date.weekday())
         end_date = start_date + datetime.timedelta(days=5)
         print("시작일: " + str(start_date))
         print("종료일: " + str(end_date))
@@ -250,7 +282,6 @@ def create_default_schedule(request):
                 # attendance_formset = LessonAttendanceFormset
                 # context = {'lesson_form': lesson_form, 'attendance_formset': attendance_formset}
 
-
     return redirect('/')
 
 
@@ -316,7 +347,7 @@ def delete_lesson(request, lesson_id):
     except:
         raise Http404("존재하지 않는 수업 일정입니다.")
 
-    return redirect('/lesson/')
+    return redirect('/')
 
 
 # 겹치는 수업 시간 체크

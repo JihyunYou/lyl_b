@@ -2,11 +2,15 @@
 
 {% block main_area %}
 
+{% load crispy_forms_tags %}
+
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
+
+            selectable: true,
 
             timeZone: 'Asia/Seoul',
             locale: 'ko',
@@ -28,20 +32,122 @@
                     title: '{{ i.title }}',
                     url: '/lesson/{{ i.lesson_id }}/',
                     start: '{{ i.start }}',
-                    end: '{{ i.end }}'
+                    end: '{{ i.end }}',
+                    color: '{{ i.color }}'
                 },
                 {% endfor %}
             ],
 
-            initialView: 'timeGridWeek'
+            initialView: 'timeGridWeek',
+
+            dateClick: function(info) {
+                const dtArray = info.dateStr.split("T");
+                document.getElementById("datePicker").value = dtArray[0];
+                document.getElementById("createButton").click();
+<!--                alert('Date: ' + info.dateStr);-->
+<!--                alert('Resource ID: ' + info.date);-->
+                alert(dtArray[0]);
+                alert(dtArray[1]);
+
+            }
         });
         calendar.render();
     });
 
 </script>
 
+<!--    Modal 화면    -->
+{% if lesson_form.errors or error %}
+<script>
+    $(window).on('load', function() {
+        $('#createLessonModal').modal('show');
+    });
+</script>
+{% endif %}
+<div class="modal fade" id="createLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createLessonModalLabel">수업 일정 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        [주별] 일정 자동 등록
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <form class="check_form" action="lesson/create_lesson/auto" method="post">
+                                {% csrf_token %}
+                                <div class="input-group">
+                                    <input type="text" name="schedule_date" id="datePicker" class="form-control" autocomplete="off" placeholder="날짜 선택" required>
+                                    <button type="submit" class="btn btn-success"><i class="fas fa-calendar-plus">&nbsp;&nbsp;기본 일정 자동 등록</i></button>
+                                </div>
+                            </form>
+                            <script>
+                                $('#datePicker').datepicker({
+                                    format: "yyyy-mm-dd",
+                                    language: "ko",
+                                    autoclose: true,
+                                    clearBtn : true,
+                                    weekStart : 1
+                                });
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                    <div class="card-header">
+                        [일별] 일정 수동 등록
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <form class="check_form" method="post">
+                                {% if error %}
+                                    <script>
+                                        document.getElementById("createButton").click();
+                                        $(#createLessonModal).modal("show");
+                                    </script>
+                                    <div class="alert alert-block alert-danger">
+                                        <ul class="m-0">
+                                            <li>{{ error }}</li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+
+                                {% csrf_token %}
+                                {{ lesson_form | crispy }}
+
+                                {{ attendance_formset.management_form }}
+                                {% for form in attendance_formset %}
+                                    {{ form|crispy }}
+                                {% endfor %}
+
+                                <button type="submit" class="btn btn-success float-right">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <!--    실제 화면   -->
-<div class="text-end">
+<div class="text-end d-none">
+
+    <!-- Button trigger modal -->
+    <a class="btn btn-danger btn-sm float-right" role="button" data-bs-toggle="modal" data-bs-target="#createLessonModal" id="createButton">
+        <i class="fas fa-calendar-times">&nbsp;&nbsp;일정 등록 테스트</i>
+    </a>
 
     <a class="btn btn-sm btn-success float-right" href="/lesson/create_lesson/" role="button">
         <i class="fas fa-calendar-plus">&nbsp;&nbsp;일정 등록</i>
@@ -50,5 +156,6 @@
 </div>
 <div class="py-1"></div>
 <div id='calendar'></div>
+
 
 {% endblock %}
