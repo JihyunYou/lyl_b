@@ -10,6 +10,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href='/static/fullcalendar/main.css' rel='stylesheet' />
     <script src='/static/fullcalendar/main.js'></script>
     <script src='/static/fullcalendar/fullcalendar-columns.js'></script>
@@ -23,12 +24,25 @@
     <script src="/static/datepicker/bootstrap-datepicker.ko.min.js"></script>
 
     <style type="text/css">
-        #calendar a {
-            color: black;
-
-        }
+        #calendar a {color: black;}
         #calendar .fc-day.fc-day-sat a { color:#0000FF; }    /* 토요일 */
         #calendar .fc-day-sun a { color:#FF0000; }    /* 일요일 */
+
+        @media(max-width: 767px) {
+            .fc-toolbar.fc-header-toolbar {
+                display: flex;
+                flex-direction: column;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-left {
+                order: 3;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-center {
+                order: 1;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-right {
+                order: 2;
+            }
+        }
     </style>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
@@ -47,7 +61,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/member" style="color: #FFFFFF;">회원관리</a>
+                        <a class="nav-link active" href="/member" style="color: #FFFFFF;">회원관리</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/lesson" style="color: #FFFFFF;">수업관리</a>
