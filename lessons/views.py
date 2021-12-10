@@ -1,12 +1,15 @@
 import datetime
 
 from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 from django import forms
 from django.forms import ModelForm, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import CreateView
 
+import lessons
 from custom_users.models import User
 from .models import Lesson, Attendance, Member
 
@@ -28,6 +31,9 @@ class LessonForm(ModelForm):
             'teacher_id': '담당 강사',
             'lesson_type': '수업 종류'
         }
+        # widgets = {
+        #     'lesson_time': forms.TimeInput(format="%H:%M"),
+        # }
 
 
 class AttendanceForm(ModelForm):
@@ -42,6 +48,8 @@ LessonAttendanceFormset = inlineformset_factory(
     form=AttendanceForm,
     max_num=2,
     min_num=1,
+    validate_min=True,
+    extra=2,
     labels={
         'member_id': '회원명'
     }
@@ -125,10 +133,13 @@ def index(request):
             # 스케쥴 시간 체크
             #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
             if check_lesson_schedule(lesson):   # 이상 없는 경우
-                lesson.save()
                 attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
                 if attendance_formset.is_valid():
+                    lesson.save()
                     attendance_formset.save()
+                    # 정상 저장한 경우, 새로고침시 POST 가 다시 작동되지 않도록 하기 위해
+                    # reverse 를 사용하여 동일한 view 로 redirection
+                    return HttpResponseRedirect(reverse(lessons.views.index))
             else:
                 context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
 

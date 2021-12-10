@@ -15,6 +15,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">이름</th>
+                <th scope="col">상태</th>
                 <th scope="col">성별</th>
                 <th scope="col">생년월일</th>
                 <th scope="col">핸드폰 번호</th>
@@ -26,6 +27,7 @@
              <tr onClick="location.href='/member/{{ member.id }}'">
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ member.name }}</td>
+                <td>{{ member.get_status_display }}</td>
                 <td>{{ member.get_gender_display }}</td>
                 <td>{{ member.date_of_birth | date:"Y년 m월 d일"  }}</td>
                 <td>{{ member.phone_number }}

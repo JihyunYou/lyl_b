@@ -41,13 +41,18 @@
             initialView: 'timeGridWeek',
 
             dateClick: function(info) {
+                document.getElementById("id_lesson_time").value = ""
+
                 const dtArray = info.dateStr.split("T");
                 document.getElementById("datePicker").value = dtArray[0];
+                document.getElementById("id_lesson_date").value = dtArray[0];
+
+                if (typeof dtArray[1] !== 'undefined') {
+                    document.getElementById("id_lesson_time").value = dtArray[1];
+<!--                    alert(dtArray[1]);-->
+                }
+
                 document.getElementById("createButton").click();
-<!--                alert('Date: ' + info.dateStr);-->
-<!--                alert('Resource ID: ' + info.date);-->
-                alert(dtArray[0]);
-                alert(dtArray[1]);
 
             }
         });
@@ -57,7 +62,7 @@
 </script>
 
 <!--    Modal 화면    -->
-{% if lesson_form.errors or error %}
+{% if lesson_form.errors or attendance_formset.errors or error %}
 <script>
     $(window).on('load', function() {
         $('#createLessonModal').modal('show');
@@ -78,7 +83,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <form class="check_form" action="lesson/create_lesson/auto" method="post">
+                            <form action="lesson/create_lesson/auto" method="post">
                                 {% csrf_token %}
                                 <div class="input-group">
                                     <input type="text" name="schedule_date" id="datePicker" class="form-control" autocomplete="off" placeholder="날짜 선택" required>
@@ -104,7 +109,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <form class="check_form" method="post">
+                            <form method="post">
                                 {% if error %}
                                     <script>
                                         document.getElementById("createButton").click();
