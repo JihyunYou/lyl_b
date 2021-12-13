@@ -7,7 +7,7 @@ from lessons.models import Lesson, Attendance
 # python manage.py shell < db_initial_script.py
 
 # °ü¸®ÀÚ °èÁ¤
-user = User.objects.create_superuser('À¯ÁöÇö', password='000000')
+user = User.objects.create_superuser('À¯ÁöÇö', password='890220')
 user.is_admin = True
 user.is_active = True
 user.user_grade = 1
@@ -16,7 +16,7 @@ user.date_of_birth = '1990-01-06'
 user.phone_number = '01031521438'
 user.save()
 
-user = User.objects.create_superuser('ºù¹Î¾Æ', password='000000')
+user = User.objects.create_superuser('ºù¹Î¾Æ', password='890220')
 user.is_admin = True
 user.is_active = True
 user.user_grade = 3
