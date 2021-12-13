@@ -2,6 +2,8 @@
 
 {% block main_area %}
 
+{% load static %}
+
 <div class="text-end">
     <a class="btn btn-success btn-sm float-right" href="http://naver.me/G14uvdO0" role="button">
         <i class="fas fa-heart">&nbsp;&nbsp;네이퍼 페이지로 이동</i>
@@ -29,28 +31,28 @@
     </div>
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="/static/img/center_01.jpg" class="d-block w-100" alt="...">
+                <img src="{% static 'img/center_01.jpg' %}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>센터 외부</h5>
                     <p>안녕하세요! 라일비 필라테스입니다</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/static/img/center_02.jpg" class="d-block w-100" alt="...">
+                <img src="{% static 'img/center_02.jpg' %}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>탈의실</h5>
                     <p>Love Your Life, Body</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/static/img/center_03.jpg" class="d-block w-100" alt="...">
+                <img src="{% static 'img/center_03.jpg' %}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>센터 전경</h5>
                     <p>Love Your Life, Body</p>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="/static/img/center_04.jpg" class="d-block w-100" alt="...">
+                <img src="{% static 'img/center_04.jpg' %}" class="d-block w-100" alt="...">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>센터 전경</h5>
                     <p>Love Your Life, Body</p>
