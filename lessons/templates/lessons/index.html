@@ -82,6 +82,28 @@
     });
 </script>
 {% endif %}
+<!--    로그인 알람  -->
+<div class="modal fade" id="loginAlertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginAlertModalLabel">경고</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-block alert-danger">
+                    <ul class="m-0">
+                        <li>수업 일정 생성 권한이 없습니다. 로그인 후 다시 시도해 주십시오.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="createLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -182,7 +204,18 @@
 <div class="text-end d-none">
 
     <!-- Button trigger modal -->
-    <a class="btn btn-danger btn-sm float-right" role="button" data-bs-toggle="modal" data-bs-target="#createLessonModal" id="createButton">
+    <a
+        class="btn btn-danger btn-sm float-right"
+        role="button"
+        data-bs-toggle="modal"
+        data-bs-target=
+            {% if user.is_authenticated %}
+                "#createLessonModal"
+            {% else %}
+                "#loginAlertModal"
+            {% endif %}
+        id="createButton"
+    >
         <i class="fas fa-calendar-times">&nbsp;&nbsp;일정 등록 테스트</i>
     </a>
 
