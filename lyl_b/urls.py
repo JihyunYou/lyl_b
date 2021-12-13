@@ -74,4 +74,4 @@ urlpatterns = [
     path('qna/<int:post_id>/create_comment', qna_app.views.create_comment, name='qna_create_comment'),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_URL)
+urlpatterns += static(settings.STATIC_ROOT, document_root=settings.STATIC_ROOT)
