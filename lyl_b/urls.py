@@ -20,10 +20,12 @@ from django.contrib.auth import views as auth_views
 import lessons.views
 import members.views
 import custom_users.views
+import qna_app.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lessons.views.index, name='index'),
+    path('about/', custom_users.views.about, name='about'),
 
     path('login/', custom_users.views.login, name='login'),
     path('logout/', custom_users.views.logout, name='logout'),
@@ -63,4 +65,9 @@ urlpatterns = [
         lessons.views.manage_attendance,
         name='manage_attendance'
     ),
+
+    path('qna/', qna_app.views.index, name='qna_list'),
+    path('qna/create/', qna_app.views.create_qna, name='qna_create'),
+    path('qna/<int:post_id>/', qna_app.views.detail, name='qna_detail'),
+    path('qna/<int:post_id>/create_comment', qna_app.views.create_comment, name='qna_create_comment'),
 ]

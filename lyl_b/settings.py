@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'custom_users',
     'members',
     'lessons',
+    'qna_app',
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',

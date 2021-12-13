@@ -32,3 +32,10 @@ def logout(request):
     print('로그아웃 method')
     auth.logout(request)
     return redirect(lessons.views.index)
+
+
+def about(request):
+    return render(
+        request,
+        'about.html'
+    )
