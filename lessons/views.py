@@ -124,24 +124,24 @@ def index(request):
     context = {}
 
     # 일정 생성
-    if request.POST:
-        lesson_form = LessonForm(request.POST)
-
-        if lesson_form.is_valid():
-            lesson = lesson_form.save(commit=False)
-
-            # 스케쥴 시간 체크
-            #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
-            if check_lesson_schedule(lesson):   # 이상 없는 경우
-                attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
-                if attendance_formset.is_valid():
-                    lesson.save()
-                    attendance_formset.save()
-                    # 정상 저장한 경우, 새로고침시 POST 가 다시 작동되지 않도록 하기 위해
-                    # reverse 를 사용하여 동일한 view 로 redirection
-                    return HttpResponseRedirect(reverse(lessons.views.index))
-            else:
-                context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
+    # if request.POST:
+    #     lesson_form = LessonForm(request.POST)
+    #
+    #     if lesson_form.is_valid():
+    #         lesson = lesson_form.save(commit=False)
+    #
+    #         # 스케쥴 시간 체크
+    #         #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
+    #         if check_lesson_schedule(lesson):   # 이상 없는 경우
+    #             attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
+    #             if attendance_formset.is_valid():
+    #                 lesson.save()
+    #                 attendance_formset.save()
+    #                 # 정상 저장한 경우, 새로고침시 POST 가 다시 작동되지 않도록 하기 위해
+    #                 # reverse 를 사용하여 동일한 view 로 redirection
+    #                 return HttpResponseRedirect(reverse(lessons.views.index))
+    #         else:
+    #             context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
 
     context['lesson_form'] = lesson_form
     context['attendance_formset'] = attendance_formset
@@ -195,6 +195,11 @@ def detail(request, lesson_id):
 
 # 기본 스케쥴 생성
 def create_default_schedule(request):
+    # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자의 일정 등록 차단")
+        return redirect('/')
+
     member_objects = Member.objects.filter(status=1)
 
     if request.POST:
@@ -297,6 +302,15 @@ def create_default_schedule(request):
 
 
 def create_manual_schedule(request):
+    print('강습 일정 수동 등록')
+
+    # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자의 일정 등록 차단")
+        return redirect('/')
+
+    print('유저 네임: "' + request.user.name)
+
     lesson_form = LessonForm
     attendance_formset = LessonAttendanceFormset
     context = {'lesson_form': lesson_form, 'attendance_formset': attendance_formset}
@@ -334,6 +348,11 @@ def create_manual_schedule(request):
 
 # 출석관리
 def manage_attendance(request):
+    # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자")
+        return redirect('/')
+
     print("test")
     lesson_id = request.POST['lesson_id']
     member_id = request.POST['member_id']

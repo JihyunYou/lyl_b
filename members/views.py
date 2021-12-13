@@ -105,6 +105,11 @@ def detail(request, member_id):
 
 
 def delete_registration(request, member_id, registration_id):
+    # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자")
+        return redirect('/')
+
     try:
         registration_object = Registration.objects.get(pk=registration_id)
         registration_object.delete()
@@ -115,6 +120,11 @@ def delete_registration(request, member_id, registration_id):
 
 
 def delete_member(request, member_id):
+    # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자")
+        return redirect('/')
+
     try:
         member_object = Member.objects.get(pk=member_id)
         registration_objects = Registration.objects.filter(member_id=member_id)

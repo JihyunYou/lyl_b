@@ -2,29 +2,38 @@
 
 {% block main_area %}
 
+{% if user.is_authenticated %}
 <div class="text-end">
     <h1 class="display-6 fw-bold">라일비 수업 목록</h1>
 </div>
 
 <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">수업일</th>
-                <th scope="col">수업시간</th>
-                <th scope="col">담당강사</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for lesson in lesson_objects %}
-             <tr onClick="location.href='/lesson/{{ lesson.id }}'">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ lesson.lesson_date }}</td>
-                <td>{{ lesson.lesson_time }}</td>
-                <td>{{ lesson.teacher_id.name }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">수업일</th>
+            <th scope="col">수업시간</th>
+            <th scope="col">담당강사</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for lesson in lesson_objects %}
+         <tr onClick="location.href='/lesson/{{ lesson.id }}'">
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ lesson.lesson_date }}</td>
+            <td>{{ lesson.lesson_time }}</td>
+            <td>{{ lesson.teacher_id.name }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% else %}
+
+<div class="text-end">
+    <h1 class="display-6 fw-bold">수업 상세 정보는 관계자만 볼 수 있습니다</h1>
+</div>
+
+{% endif %}
 
 {% endblock %}

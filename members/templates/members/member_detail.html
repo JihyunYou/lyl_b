@@ -2,6 +2,7 @@
 
 {% block main_area %}
 
+{% if user.is_authenticated %}
 <div class="row">
     <div class="col-lg-3">
         <div class="card">
@@ -227,5 +228,13 @@
         </div>
     </div>
 </div>
+
+{% else %}
+
+<div class="text-end">
+    <h1 class="display-6 fw-bold">회원 상세 정보는 관계자만 볼 수 있습니다</h1>
+</div>
+
+{% endif %}
 
 {% endblock %}
