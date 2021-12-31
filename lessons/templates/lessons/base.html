@@ -45,6 +45,23 @@
                 order: 2;
             }
         }
+
+        @media only screen and (max-width: 767px) {
+            .hidden-mobile {
+                display: none;
+            }
+            .visible-mobile {
+<!--                display: block;-->
+            }
+        }
+        @media only screen and (min-width: 768px) {
+            .hidden-mobile {
+<!--                display: block;-->
+            }
+            .visible-mobile {
+                display: none;
+            }
+        }
     </style>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
@@ -103,6 +120,9 @@
     <div class="py-3"></div>
 
     <!--  footer  -->
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+    <br><br><br><br>
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
             <p class="col-md-4 mb-0 text-muted">© 2021 Peach All right reserved</p>

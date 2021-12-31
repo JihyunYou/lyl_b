@@ -3,30 +3,56 @@
 {% block main_area %}
 
 {% if user.is_authenticated %}
-<div class="text-end">
-    <h1 class="display-6 fw-bold">라일비 수업 목록</h1>
+
+<div class="row">
+    <div class="col-lg-3 hidden-mobile">
+        <div class="card">
+            <div class="card-header">
+                요약
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>총 {{ lesson_objects.count }} 개의 수업</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="text-start">
+            <h1 class="display-6 fw-bold">라일비 수업 목록</h1>
+        </div>
+        <hr class="style1">
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">수업일</th>
+                    <th scope="col">수업시간</th>
+                    <th scope="col">담당강사</th>
+                    <th>수강 인원</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lesson in lesson_objects %}
+                 <tr onClick="location.href='/lesson/{{ lesson.id }}'">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ lesson.lesson_date | date:"Y.m.d (D)" }}</td>
+                    <td>{{ lesson.lesson_time }}</td>
+                    <td>{{ lesson.teacher_id.name }}</td>
+                    <td>{{ lesson.attendance_set.count }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<table class="table table-hover">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">수업일</th>
-            <th scope="col">수업시간</th>
-            <th scope="col">담당강사</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for lesson in lesson_objects %}
-         <tr onClick="location.href='/lesson/{{ lesson.id }}'">
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ lesson.lesson_date }}</td>
-            <td>{{ lesson.lesson_time }}</td>
-            <td>{{ lesson.teacher_id.name }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
 
 {% else %}
 

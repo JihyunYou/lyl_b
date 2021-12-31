@@ -7,7 +7,7 @@
     <div class="col-lg-3">
         <div class="card mb-4 rounded-3 shadow-sm">
             <div class="card-header py-2">
-                수업 정보입니다
+                수업 정보
             </div>
             <div class="card-body">
                 <table class="table">
@@ -39,57 +39,16 @@
                         </a>
                     </div>
 
-                    <!-- Edit Modal -->
-                    <div class="modal fade" id="editLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="eidtLessonModalLabel">수업 정보 수정</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form method="post">
-                                    {% csrf_token %}
-                                    <div class="modal-body">
-                                        <table class="table">
-                                            {{ form }}
-                                        </table>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                        <button type="submit" class="btn btn-success float-right">적용</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Delete Modal -->
-                    <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">경고</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    수업 일정 삭제시 회원 출석 정보도 함께 삭제 됩니다.
-                                </div>
-                                <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                <a class="btn btn-danger float-right" href="/lesson/{{ lesson_object.id }}/delete" role="button">
-                                    삭제
-                                </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
     </div>
 
     <div class="col-lg-9">
+        <div class="text-start">
+            <h1 class="display-6 fw-bold">수강 회원</h1>
+        </div>
+        <hr class="style1">
         <div class="row">
             {% for attendance in attendance_objects %}
             <div class="col-lg">
@@ -213,5 +172,50 @@
 </div>
 
 {% endif %}
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eidtLessonModalLabel">수업 정보 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <table class="table">
+                        {{ form }}
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-success float-right">적용</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                수업 일정 삭제시 회원 출석 정보도 함께 삭제 됩니다.
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a class="btn btn-danger float-right" href="/lesson/{{ lesson_object.id }}/delete" role="button">
+                삭제
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

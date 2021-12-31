@@ -3,42 +3,69 @@
 {% block main_area %}
 
 {% if user.is_authenticated %}
-<div class="text-end">
-    <h1 class="display-6 fw-bold">라일비 회원 목록</h1>
-    <a class="btn btn-success btn-sm float-right" href="/member/create_member/" role="button">
-        <i class="fas fa-user-plus">&nbsp;&nbsp;신규 회원 등록</i>
-    </a>
+
+<div class="row">
+    <div class="col-lg-3 hidden-mobile">
+        <div class="card">
+            <div class="card-header">
+                요약
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>총 {{ member_objects.count }} 명의 회원</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="text-start">
+            <h1 class="display-6 fw-bold">라일비 회원 목록</h1>
+        </div>
+        <hr class="style1">
+        <div class="text-end">
+            <a class="btn btn-success btn-sm float-right" href="/member/create_member/" role="button">
+                <i class="fas fa-user-plus">&nbsp;&nbsp;신규 회원 등록</i>
+            </a>
+        </div>
+
+        <div>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">이름</th>
+                        <th scope="col">상태</th>
+                        <th scope="col">성별</th>
+                        <th class="hidden-mobile" scope="col">생년월일</th>
+                        <th scope="col">핸드폰 번호</th>
+                        <th scope="col">담당 강사</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in member_objects %}
+                     <tr onClick="location.href='/member/{{ member.id }}'">
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ member.name }}</td>
+                        <td>{{ member.get_status_display }}</td>
+                        <td>{{ member.get_gender_display }}</td>
+                        <td class="hidden-mobile" >{{ member.date_of_birth | date:"Y년 m월 d일"  }}</td>
+                        <td>{{ member.phone_number }}
+                        <td>{{ member.teacher_id }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+    </div>
 </div>
 
-<div>
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">이름</th>
-                <th scope="col">상태</th>
-                <th scope="col">성별</th>
-                <th scope="col">생년월일</th>
-                <th scope="col">핸드폰 번호</th>
-                <th scope="col">담당 강사</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for member in member_objects %}
-             <tr onClick="location.href='/member/{{ member.id }}'">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ member.name }}</td>
-                <td>{{ member.get_status_display }}</td>
-                <td>{{ member.get_gender_display }}</td>
-                <td>{{ member.date_of_birth | date:"Y년 m월 d일"  }}</td>
-                <td>{{ member.phone_number }}
-                <td>{{ member.teacher_id }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
 
-</div>
 {% else %}
 
 <div class="text-end">

@@ -42,7 +42,9 @@ class Lesson(models.Model):
 # 출석 관리
 class Attendance(models.Model):
     lesson_id = models.ForeignKey(
-        Lesson, related_name="lesson", on_delete=models.CASCADE, db_column="lesson_id",
+        Lesson,
+        on_delete=models.CASCADE,
+        db_column="lesson_id",
         null=False
     )
     member_id = models.ForeignKey(
