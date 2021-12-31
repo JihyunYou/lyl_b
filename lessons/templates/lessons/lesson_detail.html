@@ -45,10 +45,22 @@
     </div>
 
     <div class="col-lg-9">
-        <div class="text-start">
-            <h1 class="display-6 fw-bold">수강 회원</h1>
+        <div class="row">
+            <div class="col-5 text-start">
+                <h1 class="display-6 fw-bold">수강 회원</h1>
+            </div>
+            <div class="col-7 text-end">
+                <a
+                    class="btn btn-warning"
+                    role="button"
+                    href="/lesson"
+                >
+                    <i class="fas fa-backward">&nbsp;&nbsp;돌아가기</i>
+                </a>
+            </div>
         </div>
-        <hr class="style1">
+
+        <hr class="style1" style="margin-top:0rem;">
         <div class="row">
             {% for attendance in attendance_objects %}
             <div class="col-lg">
