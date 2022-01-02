@@ -1,5 +1,6 @@
 import datetime
 
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django import forms
@@ -30,6 +31,14 @@ class LessonForm(ModelForm):
             'lesson_time': '수업 시간',
             'teacher_id': '담당 강사',
             'lesson_type': '수업 종류'
+        }
+        widgets = {
+            'lesson_date': DatePickerInput(
+                options={
+                    'format': 'YYYY-MM-DD',
+                    'locale': 'ko',
+                }
+            ),
         }
         # widgets = {
         #     'lesson_time': forms.TimeInput(format="%H:%M"),

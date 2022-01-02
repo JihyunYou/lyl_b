@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.bootstrap import InlineRadios
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Div
@@ -40,6 +41,14 @@ class MemberForm(ModelForm):
             'phone_number': '전화번호',
             'teacher_id': '담당강사'
         }
+        widgets = {
+            'date_of_birth': DatePickerInput(
+                options={
+                    'format': 'YYYY-MM-DD',
+                    'locale': 'ko',
+                }
+            ),
+        }
 
 
 # registration form 초기 설정
@@ -57,14 +66,19 @@ class RegistrationFrom(ModelForm):
 
 
 def index(request):
+    context = {}
+
+
     member_objects = Member.objects.all()
+    context['member_objects'] = member_objects
+
+    member_form = MemberForm
+    context['member_form'] = member_form
 
     return render(
         request,
         'members/member_index.html',
-        {
-            'member_objects': member_objects
-        }
+        context
     )
 
 
@@ -104,6 +118,20 @@ def detail(request, member_id):
     )
 
 
+def add_member(request):
+    if not request.user.is_authenticated:
+        print("권한 없는 사용자")
+        return redirect('/')
+
+    if request.POST:
+        member_form = MemberForm(request.POST)
+        if member_form.is_valid():
+            member = member_form.save()
+            return redirect(detail, member_id=member.id)
+
+    return redirect(index)
+
+
 def delete_registration(request, member_id, registration_id):
     # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
     if not request.user.is_authenticated:
@@ -136,24 +164,6 @@ def delete_member(request, member_id):
     return redirect('/member/')
 
 
-def create_member(request):
-    member_form = MemberForm
-
-    if request.POST:
-        member_form = MemberForm(request.POST)
-        if member_form.is_valid():
-            member = member_form.save()
-            return redirect(detail, member_id=member.id)
-
-    return render(
-        request,
-        'members/member_create.html',
-        {
-            'member_form': member_form
-        }
-    )
-
-
 def cal_remaining(member_id):
     total_count = 0
     registration_objects = Registration.objects.filter(member_id=member_id)
@@ -166,6 +176,7 @@ def cal_remaining(member_id):
             total_count -= 1
 
     return total_count
+
 
 class MemberCreate(CreateView):
     model = Member

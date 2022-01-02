@@ -28,7 +28,12 @@
         </div>
         <hr class="style1">
         <div class="text-end">
-            <a class="btn btn-success btn-sm float-right" href="/member/create_member/" role="button">
+            <a
+                class="btn btn-success btn-sm float-right"
+                role="button"
+                data-bs-toggle="modal"
+                data-bs-target="#addMemberModal"
+            >
                 <i class="fas fa-user-plus">&nbsp;&nbsp;신규 회원 등록</i>
             </a>
         </div>
@@ -65,6 +70,7 @@
     </div>
 </div>
 
+{% include 'members/add_member_modal.html' %}
 
 {% else %}
 

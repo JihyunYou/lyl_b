@@ -1,5 +1,7 @@
 {% extends 'lessons/base.html' %}
 
+{% load bootstrap5 %}
+
 {% block main_area %}
 
 {% if user.is_authenticated %}
@@ -193,12 +195,11 @@
                 <h5 class="modal-title" id="eidtLessonModalLabel">수업 정보 수정</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
+            {{ form.media }}
             <form method="post">
                 {% csrf_token %}
                 <div class="modal-body">
-                    <table class="table">
-                        {{ form }}
-                    </table>
+                    {% bootstrap_form form layout="horizontal" %}
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
