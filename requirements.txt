@@ -1,4 +1,4 @@
 django
 django-bootstrap-v5
 crispy_bootstrap5
-django-bootstrap-datepicker-plusa
+django-bootstrap-datepicker-plus
