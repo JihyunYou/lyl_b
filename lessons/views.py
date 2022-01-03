@@ -12,6 +12,7 @@ from django.views.generic import CreateView
 
 import lessons
 from custom_users.models import User
+from members.models import DefaultSchedule
 from .models import Lesson, Attendance, Member
 
 
@@ -132,26 +133,6 @@ def index(request):
     # Context
     context = {}
 
-    # 일정 생성
-    # if request.POST:
-    #     lesson_form = LessonForm(request.POST)
-    #
-    #     if lesson_form.is_valid():
-    #         lesson = lesson_form.save(commit=False)
-    #
-    #         # 스케쥴 시간 체크
-    #         #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
-    #         if check_lesson_schedule(lesson):   # 이상 없는 경우
-    #             attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
-    #             if attendance_formset.is_valid():
-    #                 lesson.save()
-    #                 attendance_formset.save()
-    #                 # 정상 저장한 경우, 새로고침시 POST 가 다시 작동되지 않도록 하기 위해
-    #                 # reverse 를 사용하여 동일한 view 로 redirection
-    #                 return HttpResponseRedirect(reverse(lessons.views.index))
-    #         else:
-    #             context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
-
     context['lesson_form'] = lesson_form
     context['attendance_formset'] = attendance_formset
     context['events'] = get_all_events
@@ -222,76 +203,15 @@ def create_default_schedule(request):
 
         for member in member_objects:
             try:
-                if member.mon_yn:
+                default_schedule_objects = DefaultSchedule.objects.filter(member_id=member)
+                for default_schedule in default_schedule_objects:
+                    print(default_schedule.member_id)
+                    print(default_schedule.day_of_week)
+                    print(default_schedule.lesson_time)
                     # 수업 생성, 이미 수업 일정이 있다면 Get
                     lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date,
-                        lesson_time=member.mon_time,
-                        teacher_id=User.objects.get(pk=member.teacher_id.id)
-                    )
-
-                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
-                    attendance, created = Attendance.objects.get_or_create(
-                        lesson_id=lesson,
-                        member_id=member,
-                    )
-                if member.tue_yn:
-                    # 수업 생성, 이미 수업 일정이 있다면 Get
-                    lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date + datetime.timedelta(days=1),
-                        lesson_time=member.tue_time,
-                        teacher_id=User.objects.get(pk=member.teacher_id.id)
-                    )
-
-                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
-                    attendance, created = Attendance.objects.get_or_create(
-                        lesson_id=lesson,
-                        member_id=member,
-                    )
-                if member.wed_yn:
-                    # 수업 생성, 이미 수업 일정이 있다면 Get
-                    lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date + datetime.timedelta(days=2),
-                        lesson_time=member.wed_time,
-                        teacher_id=User.objects.get(pk=member.teacher_id.id)
-                    )
-
-                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
-                    attendance, created = Attendance.objects.get_or_create(
-                        lesson_id=lesson,
-                        member_id=member,
-                    )
-                if member.thu_yn:
-                    # 수업 생성, 이미 수업 일정이 있다면 Get
-                    lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date + datetime.timedelta(days=3),
-                        lesson_time=member.thu_time,
-                        teacher_id=User.objects.get(pk=member.teacher_id.id)
-                    )
-
-                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
-                    attendance, created = Attendance.objects.get_or_create(
-                        lesson_id=lesson,
-                        member_id=member,
-                    )
-                if member.fri_yn:
-                    # 수업 생성, 이미 수업 일정이 있다면 Get
-                    lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date + datetime.timedelta(days=4),
-                        lesson_time=member.fri_time,
-                        teacher_id=User.objects.get(pk=member.teacher_id.id)
-                    )
-
-                    # 수강 생성, 이미 등록 정보가 있다면 생성하지 않는다.
-                    attendance, created = Attendance.objects.get_or_create(
-                        lesson_id=lesson,
-                        member_id=member,
-                    )
-                if member.sat_yn:
-                    # 수업 생성, 이미 수업 일정이 있다면 Get
-                    lesson, created = Lesson.objects.get_or_create(
-                        lesson_date=start_date + datetime.timedelta(days=5),
-                        lesson_time=member.sat_time,
+                        lesson_date=start_date + datetime.timedelta(days=default_schedule.day_of_week - 1),
+                        lesson_time=default_schedule.lesson_time,
                         teacher_id=User.objects.get(pk=member.teacher_id.id)
                     )
 
@@ -301,11 +221,9 @@ def create_default_schedule(request):
                         member_id=member,
                     )
 
-            except:
+            except Exception as e:
+                print(e)
                 return HttpResponse("error")
-                # lesson_form = LessonForm
-                # attendance_formset = LessonAttendanceFormset
-                # context = {'lesson_form': lesson_form, 'attendance_formset': attendance_formset}
 
     return redirect('/')
 

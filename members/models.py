@@ -9,20 +9,22 @@ GENDER_CHOICES = [
     ('m', '남자'), ('f', '여자')
 ]
 
-DAY_LESSON_YN = [
-    (True, '수업 있음'), (False, '수업 없음')
-]
-
 REGISTRATION_TYPE = [
     (1, '첫등록'), (2, '재등록')
 ]
 
 MEMBER_STATUS = [
-    (1, '회원권 진행중'), (2, '회원권 홀딩'), (3, '회원권 만료')
+    (1, '진행중'), (2, '일시중지'), (3, '만료')
 ]
+
+DAY_OF_WEEK = [
+    (1, '월요일'), (2, '화요일'), (3, '수요일'), (4, '목요일'), (5, '금요일'), (6, '토요일'), (7, '일요일'),
+]
+
 
 # 강습 회원
 class Member(models.Model):
+    objects = None
     name = models.CharField(
         # help_text="회원 이름",
         max_length=20, null=False)
@@ -30,7 +32,11 @@ class Member(models.Model):
     date_of_birth = models.DateField(null=True)
 
     phoneNumberRegex = RegexValidator(regex=r'^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$')
-    phone_number = models.CharField(validators=[phoneNumberRegex], max_length=11)
+    phone_number = models.CharField(
+        validators=[phoneNumberRegex],
+        max_length=11,
+        null=True,
+    )
 
     teacher_id = models.ForeignKey(
         Teacher, related_name="member_teacher", on_delete=models.SET_NULL, db_column="teacher_id",
@@ -39,21 +45,35 @@ class Member(models.Model):
 
     status = models.IntegerField(choices=MEMBER_STATUS, default=1)
 
-    mon_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    mon_time = models.TimeField(null=True, blank=True)
-    tue_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    tue_time = models.TimeField(null=True, blank=True)
-    wed_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    wed_time = models.TimeField(null=True, blank=True)
-    thu_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    thu_time = models.TimeField(null=True, blank=True)
-    fri_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    fri_time = models.TimeField(null=True, blank=True)
-    sat_yn = models.BooleanField(choices=DAY_LESSON_YN, default=False)
-    sat_time = models.TimeField(null=True, blank=True)
-
     def __str__(self):
-        return  self.name
+        return self.name
+
+
+class DefaultSchedule(models.Model):
+    member_id = models.ForeignKey(
+        Member,
+        on_delete=models.CASCADE,
+        db_column='member_id',
+        null=False
+    )
+    day_of_week = models.IntegerField(
+        choices=DAY_OF_WEEK,
+        null=True
+    )
+    lesson_time = models.TimeField(
+        null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['member_id', 'day_of_week', 'lesson_time'],
+                name='unique_default_schedule'
+            )
+        ]
+        ordering = ['member_id', 'day_of_week']
+
 
 # 등록 관리
 class Registration(models.Model):

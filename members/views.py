@@ -1,39 +1,20 @@
-from bootstrap_datepicker_plus.widgets import DatePickerInput
-from crispy_forms.bootstrap import InlineRadios
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div
-from django import forms
-from django.db.models import Max
-from django.forms import ModelForm
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
+from django.forms import ModelForm, formset_factory, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 
-from .models import Member, Registration
+from .models import Member, Registration, DefaultSchedule
 from lessons.models import Attendance
-from custom_users.models import User
-
-
-class CustomMemberForm(forms.Form):
-    name = forms.CharField(max_length=20, required=True)
-    teacher_id = forms.ModelMultipleChoiceField(
-        widget=forms.SelectMultiple(), queryset=User.objects.filter(user_grade=3))
 
 
 # member form 초기 설정 (crispy)
 class MemberForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(MemberForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-3'
-        self.helper.field_class = 'col-9'
-        self.helper.add_input(Submit('submit', '등록', css_class='btn-success'))
-        self.helper.form_method = 'POST'
-
     class Meta:
         model = Member
-        fields = '__all__'
+        fields = [
+            'name', 'teacher_id', 'gender', 'date_of_birth', 'phone_number'
+        ]
         labels = {
             'name': '이름',
             'gender': '성별',
@@ -46,9 +27,43 @@ class MemberForm(ModelForm):
                 options={
                     'format': 'YYYY-MM-DD',
                     'locale': 'ko',
+                    'defaultDate': '2000-01-01'
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super(MemberForm, self).__init__(*args, **kwargs)
+        self.fields['date_of_birth'].required = False
+        self.fields['phone_number'].required = False
+
+
+class DefaultScheduleForm(ModelForm):
+    class Meta:
+        model = DefaultSchedule
+        fields = [
+            'day_of_week', 'lesson_time'
+        ]
+        labels = {
+            'day_of_week': '요일',
+            'lesson_time': '시간'
+        }
+        widgets = {
+            'lesson_time': TimePickerInput(
+                options={
+                    'stepping': 30,
+                }
+            ),
+        }
+
+
+MemberDefaultScheduleFormset = inlineformset_factory(
+    Member,
+    DefaultSchedule,
+    form=DefaultScheduleForm,
+    min_num=0,
+    max_num=2,
+)
 
 
 # registration form 초기 설정
@@ -68,12 +83,13 @@ class RegistrationFrom(ModelForm):
 def index(request):
     context = {}
 
-
     member_objects = Member.objects.all()
     context['member_objects'] = member_objects
 
     member_form = MemberForm
+    defaultSchedule_formset = MemberDefaultScheduleFormset
     context['member_form'] = member_form
+    context['defaultSchedule_formset'] = defaultSchedule_formset
 
     return render(
         request,
@@ -84,18 +100,28 @@ def index(request):
 
 def detail(request, member_id):
     try:
+        # Data Load
         member_object = Member.objects.get(pk=member_id)
+        default_schedule_objects = DefaultSchedule.objects.filter(member_id=member_id)
         registration_objects = Registration.objects.filter(member_id=member_id)
         attendance_objects = Attendance.objects.filter(member_id=member_id)
 
-        # 회원 정보 수정
-        form = MemberForm(request.POST or None, instance=member_object)
-        if form.is_valid():
-            form.save()
+        # Form Init
+        member_form = MemberForm(request.POST or None, instance=member_object)
+        defaultSchedule_formset = MemberDefaultScheduleFormset(request.POST or None, instance=member_object)
+        registration_form = RegistrationFrom(request.POST or None)
+
+        # Member Update
+        if member_form.is_valid():
+            member_form.save()
+
+            # Default Schedule Update
+            if defaultSchedule_formset.is_valid():
+                defaultSchedule_formset.save()
+
             return redirect(detail, member_id=member_id)
 
-        # 회원권 등록
-        registration_form = RegistrationFrom(request.POST or None)
+        # Registration Update
         if registration_form.is_valid():
             registration = registration_form.save(commit=False)
             registration.member_id = member_object
@@ -104,17 +130,24 @@ def detail(request, member_id):
 
     except:
         raise Http404("존재하지 않는 회원입니다.")
+
+    finally:
+        context = {}
+        context['member_object'] = member_object
+        context['default_schedule_objects'] = default_schedule_objects
+        context['registration_objects'] = registration_objects
+        context['attendance_objects'] = attendance_objects
+
+        context['member_form'] = member_form
+        context['defaultSchedule_formset'] = defaultSchedule_formset
+        context['registration_form'] = registration_form
+
+        context['remaining_count'] = cal_remaining(member_id)
+
     return render(
         request,
         'members/member_detail.html',
-        {
-            'member_object': member_object,
-            'registration_objects': registration_objects,
-            'attendance_objects': attendance_objects,
-            'form': form,
-            'registration_form': registration_form,
-            'remaining_count': cal_remaining(member_id)
-        }
+        context
     )
 
 
@@ -127,7 +160,19 @@ def add_member(request):
         member_form = MemberForm(request.POST)
         if member_form.is_valid():
             member = member_form.save()
+
+            default_schedule = MemberDefaultScheduleFormset(
+                request.POST, instance=member
+            )
+
+            if default_schedule.is_valid():
+                default_schedule.save()
+            else:
+                print(default_schedule.errors)
+
             return redirect(detail, member_id=member.id)
+        else:
+            print(member_form.errors)
 
     return redirect(index)
 

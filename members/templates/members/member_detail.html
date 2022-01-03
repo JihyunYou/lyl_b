@@ -36,6 +36,13 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {% for schedule in default_schedule_objects %}
+                        <tr>
+                            <td>{{ schedule.get_day_of_week_display }}</td>
+                            <td>{{ schedule.lesson_time }}</td>
+                        </tr>
+                        {% endfor %}
+
                         {% if member_object.mon_yn %}
                         <tr>
                             <th>월요일 수업</th>
@@ -76,7 +83,12 @@
                 </table>
                 <div class="row">
                     <div class="col text-start">
-                        <a class="btn btn-success btn-sm float-right" role="button"  data-bs-toggle="modal" data-bs-target="#editMemberModal">
+                        <a
+                            class="btn btn-success btn-sm float-right"
+                            role="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#addMemberModal"
+                        >
                             <i class="fas fa-user-edit">&nbsp;&nbsp;정보 수정</i>
                         </a>
                     </div>
@@ -187,6 +199,8 @@
     </div>
 </div>
 
+{% include 'members/modal_update_member.html' %}
+
 {% else %}
 
 <div class="text-end">
@@ -194,31 +208,6 @@
 </div>
 
 {% endif %}
-
-<!-- Edit Modal -->
-<div class="modal fade" id="editMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="eidtMemberModalLabel">회원 정보 수정</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form method="post">
-                {% csrf_token %}
-                <div class="modal-body">
-                    {% bootstrap_form form layout="horizontal" %}
-                    <table class="table">
-
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                    <button type="submit" class="btn btn-success float-right">적용</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteMemberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

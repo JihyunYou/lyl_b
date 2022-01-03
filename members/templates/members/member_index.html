@@ -39,16 +39,17 @@
         </div>
 
         <div>
-            <table class="table table-hover">
+            <table class="table table-hover text-center">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">이름</th>
-                        <th scope="col">상태</th>
+                        <th scope="col">회원권</th>
                         <th scope="col">성별</th>
                         <th class="hidden-mobile" scope="col">생년월일</th>
                         <th scope="col">핸드폰 번호</th>
                         <th scope="col">담당 강사</th>
+                        <th scope="col">기본 일정</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -61,6 +62,11 @@
                         <td class="hidden-mobile" >{{ member.date_of_birth | date:"Y년 m월 d일"  }}</td>
                         <td>{{ member.phone_number }}
                         <td>{{ member.teacher_id }}</td>
+                        {% if member.defaultschedule_set.count == 0 %}
+                            <td>강사 협의</td>
+                        {% else %}
+                            <td>주 {{ member.defaultschedule_set.count }} 회</td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -70,7 +76,7 @@
     </div>
 </div>
 
-{% include 'members/add_member_modal.html' %}
+{% include 'members/modal_add_member.html' %}
 
 {% else %}
 

@@ -1,0 +1,49 @@
+{% load bootstrap5 %}
+
+<div
+    class="modal fade"
+    id="addMemberModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addMemberModalLabel">회원 정보 설정</h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                ></button>
+            </div>
+            {{ member_form.media }}
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+
+                    {% bootstrap_form member_form layout="horizontal" %}
+
+                    <hr class="style1">
+                    <h5>기본 수업 일정 설정</h5>
+                    <br>
+                    <div class="row">
+                    {{ defaultSchedule_formset.management_form }}
+                    {% for schedule_form in defaultSchedule_formset %}
+                        <div class="col-lg">
+                        {% bootstrap_form schedule_form layout="horizontal" %}
+                        </div>
+                    {% endfor %}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-primary float-right">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
