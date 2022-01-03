@@ -45,6 +45,9 @@ class Member(models.Model):
 
     status = models.IntegerField(choices=MEMBER_STATUS, default=1)
 
+    class Meta:
+        ordering = ['name',]
+
     def __str__(self):
         return self.name
 
