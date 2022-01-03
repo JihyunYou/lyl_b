@@ -2,28 +2,18 @@ import datetime
 
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
-from django import forms
 from django.forms import ModelForm, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import CreateView
 
-import lessons
 from custom_users.models import User
 from members.models import DefaultSchedule
 from .models import Lesson, Attendance, Member
 
 
 class LessonForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super(LessonForm, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.form_class = 'form-horizontal'
-        self.helper.label_class = 'col-lg-3'
-        self.helper.field_class = 'col-lg-9'
-
     class Meta:
         model = Lesson
         fields = '__all__'
@@ -44,6 +34,8 @@ class LessonForm(ModelForm):
         # widgets = {
         #     'lesson_time': forms.TimeInput(format="%H:%M"),
         # }
+    def __init__(self, *args, **kwargs):
+        super(LessonForm, self).__init__(*args, **kwargs)
 
 
 class AttendanceForm(ModelForm):
@@ -61,7 +53,7 @@ LessonAttendanceFormset = inlineformset_factory(
     validate_min=True,
     extra=2,
     labels={
-        'member_id': '회원명'
+        'member_id': '회원'
     }
 )
 

@@ -34,10 +34,6 @@ urlpatterns = [
 
     path('member/', members.views.index, name='member_index'),
     path('member/<int:member_id>/', members.views.detail, name='member_detail'),
-    path(
-        'member/add_member/',
-        members.views.add_member,
-    ),
     path('member/<int:member_id>/delete/', members.views.delete_member),
     path(
         'member/<int:member_id>/registration/<int:registration_id>/delete/',

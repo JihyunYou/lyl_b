@@ -2,6 +2,8 @@
 
 {% block main_area %}
 
+{% load bootstrap5 %}
+
 {% load crispy_forms_tags %}
 
 <script>
@@ -18,6 +20,7 @@
             allDaySlot: false,
             slotMinTime: "06:00:00",
             contentHeight:"auto",
+            hiddenDays: [ 0 ],
 
             slotLabelFormat: {
                 hour: '2-digit',
@@ -82,6 +85,7 @@
     });
 </script>
 {% endif %}
+
 <!--    로그인 알람  -->
 <div class="modal fade" id="loginAlertModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -104,7 +108,13 @@
     </div>
 </div>
 
-<div class="modal fade" id="createLessonModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+    class="modal fade"
+    id="createLessonModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -144,7 +154,9 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            {{ lesson_form.media }}
                             <form action="lesson/create_lesson/" method="post">
+                                {% csrf_token %}
                                 {% if error %}
                                     <script>
                                         document.getElementById("createButton").click();
@@ -157,27 +169,16 @@
                                     </div>
                                 {% endif %}
 
-                                {% csrf_token %}
-                                <div class="row">
-                                    {{ lesson_form.lesson_date | as_crispy_field }}
-                                </div>
-                                <div class="row">
-                                    {{ lesson_form.lesson_time | as_crispy_field }}
-                                </div>
-                                <div class="row">
-                                    {{ lesson_form.teacher_id | as_crispy_field }}
-                                </div>
-                                <div class="row">
-                                    {{ lesson_form.lesson_type | as_crispy_field }}
-                                </div>
+                                {% bootstrap_form lesson_form layout="horizontal" %}
 
                                 <hr class="style1">
-
+                                <h6>수강 회원 설정</h6>
+                                <br>
                                 <div class="row">
                                     {{ attendance_formset.management_form }}
                                     {% for form in attendance_formset %}
                                         <div class="col">
-                                        {{ form | crispy }}
+                                        {% bootstrap_form form layout="horizontal" %}
                                         </div>
                                     {% endfor %}
                                 </div>

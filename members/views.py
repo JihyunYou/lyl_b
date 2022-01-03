@@ -1,5 +1,5 @@
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
-from django.forms import ModelForm, formset_factory, inlineformset_factory
+from django.forms import ModelForm, formset_factory, inlineformset_factory, NumberInput
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
@@ -78,6 +78,19 @@ class RegistrationFrom(ModelForm):
             'tuition': '결제 금액',
             'reg_date': '결제 일자',
         }
+        widgets = {
+            'tuition': NumberInput(
+                attrs={
+                    'step': '1000'
+                }
+            ),
+            'reg_date': DatePickerInput(
+                options={
+                    'format': 'YYYY-MM-DD',
+                    'locale': 'ko'
+                }
+            ),
+        }
 
 
 def index(request):
@@ -88,6 +101,25 @@ def index(request):
 
     member_form = MemberForm
     defaultSchedule_formset = MemberDefaultScheduleFormset
+
+    if request.POST:
+        member_form = MemberForm(request.POST)
+        if member_form.is_valid():
+            member = member_form.save()
+
+            default_schedule = MemberDefaultScheduleFormset(
+                request.POST, instance=member
+            )
+
+            if default_schedule.is_valid():
+                default_schedule.save()
+            else:
+                print(default_schedule.errors)
+
+            return redirect(detail, member_id=member.id)
+        else:
+            print(member_form.errors)
+
     context['member_form'] = member_form
     context['defaultSchedule_formset'] = defaultSchedule_formset
 
@@ -149,32 +181,6 @@ def detail(request, member_id):
         'members/member_detail.html',
         context
     )
-
-
-def add_member(request):
-    if not request.user.is_authenticated:
-        print("권한 없는 사용자")
-        return redirect('/')
-
-    if request.POST:
-        member_form = MemberForm(request.POST)
-        if member_form.is_valid():
-            member = member_form.save()
-
-            default_schedule = MemberDefaultScheduleFormset(
-                request.POST, instance=member
-            )
-
-            if default_schedule.is_valid():
-                default_schedule.save()
-            else:
-                print(default_schedule.errors)
-
-            return redirect(detail, member_id=member.id)
-        else:
-            print(member_form.errors)
-
-    return redirect(index)
 
 
 def delete_registration(request, member_id, registration_id):

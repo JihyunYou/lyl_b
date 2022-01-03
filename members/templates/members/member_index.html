@@ -38,6 +38,10 @@
             </a>
         </div>
 
+        {% if errors %}
+            {{ errors }}
+        {% endif %}
+
         <div>
             <table class="table table-hover text-center">
                 <thead>
@@ -76,7 +80,11 @@
     </div>
 </div>
 
-{% include 'members/modal_add_member.html' %}
+{% include 'members/modal_member.html' %}
+
+<script>
+
+</script>
 
 {% else %}
 

@@ -20,7 +20,7 @@
                         </tr>
                         <tr>
                             <th>생년월일</th>
-                            <td>{{ member_object.date_of_birth | date:"Y-m-d" }}</td>
+                            <td>{{ member_object.date_of_birth | date:"Y.m.d" }}</td>
                         </tr>
                         <tr>
                             <th>전화번호</th>
@@ -114,29 +114,7 @@
                         <i class="fas fa-dollar-sign">&nbsp;&nbsp;회원 결재 정보 등록</i>
                     </a>
                 </div>
-                <!-- Create Modal -->
-                <div class="modal fade" id="createRegistrationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="createRegistrationModalLabel">회원권 결재 정보 등록</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="modal-body">
-                                    <table class="table">
-                                        {{ registration_form }}
-                                    </table>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
-                                    <button type="submit" class="btn btn-success float-right">적용</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+
                 <table class="table">
                     {% load humanize %}
                     <thead>
@@ -199,7 +177,29 @@
     </div>
 </div>
 
-{% include 'members/modal_update_member.html' %}
+{% include 'members/modal_member.html' %}
+
+<!-- Create Registration Modal -->
+<div class="modal fade" id="createRegistrationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createRegistrationModalLabel">회원권 결재 정보 등록</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {% bootstrap_form registration_form layout="horizontal" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-success float-right">적용</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 {% else %}
 
