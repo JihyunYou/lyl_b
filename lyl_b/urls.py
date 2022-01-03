@@ -19,15 +19,17 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
+import common_app.views
+import community_app.views
 import lessons.views
 import members.views
 import custom_users.views
-import qna_app.views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', lessons.views.index, name='index'),
-    path('about/', custom_users.views.about, name='about'),
+
+    path('about/', common_app.views.about),
 
     path('login/', custom_users.views.login, name='login'),
     path('logout/', custom_users.views.logout, name='logout'),
@@ -63,10 +65,29 @@ urlpatterns = [
         name='manage_attendance'
     ),
 
-    path('qna/', qna_app.views.index, name='qna_list'),
-    path('qna/create/', qna_app.views.create_qna, name='qna_create'),
-    path('qna/<int:post_id>/', qna_app.views.detail, name='qna_detail'),
-    path('qna/<int:post_id>/create_comment', qna_app.views.create_comment, name='qna_create_comment'),
+# community
+    path('community/', community_app.views.index),
+    path('community/<int:post_id>/post_detail/', community_app.views.post_detail),
+    path('community/add_post/', community_app.views.add_post),
+    path(
+        'community/<int:post_id>/post_detail/del_post/',
+        community_app.views.del_post
+    ),
+    path(
+        'community/<int:post_id>/post_detail/add_comment/',
+        community_app.views.add_comment
+    ),
+    path(
+        'community/<int:post_id>/post_detail/del_comment/',
+        community_app.views.del_comment
+    ),
+    path('community/subject_list/', community_app.views.subject_list),
+    path('community/<int:subject_id>/subject_detail/', community_app.views.subject_detail),
+    path('community/subject_list/add_subject/', community_app.views.add_subject),
+    path(
+        'community/<int:subject_id>/subject_detail/del_subject/',
+        community_app.views.del_subject
+    ),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

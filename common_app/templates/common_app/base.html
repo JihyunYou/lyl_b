@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+
+{# Load the tag library #}
+{% load bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href='{% static "fullcalendar/main.css" %}' rel='stylesheet' />
+    <script src='{% static "fullcalendar/main.js" %}'></script>
+    <script src='{% static "fullcalendar/fullcalendar-columns.js" %}'></script>
+
+    <!--  DatePicker  -->
+    <!--    Jquery Import  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <!--    실제 DatePicker Import    -->
+    <link rel="stylesheet" href="/static/datepicker/bootstrap-datepicker.css" />
+    <script src="{% static 'datepicker/bootstrap-datepicker.js' %}"></script>
+    <script src="{% static 'datepicker/bootstrap-datepicker.ko.min.js' %}"></script>
+
+    <style type="text/css">
+        #calendar a {color: black;}
+        #calendar .fc-day.fc-day-sat a { color:#0000FF; }    /* 토요일 */
+        #calendar .fc-day-sun a { color:#FF0000; }    /* 일요일 */
+
+        @media(max-width: 767px) {
+            .fc-toolbar.fc-header-toolbar {
+                display: flex;
+                flex-direction: column;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-left {
+                order: 3;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-center {
+                order: 1;
+            }
+                .fc-toolbar.fc-header-toolbar .fc-right {
+                order: 2;
+            }
+        }
+
+        @media only screen and (max-width: 767px) {
+            .hidden-mobile {
+                display: none;
+            }
+            .visible-mobile {
+<!--                display: block;-->
+            }
+        }
+        @media only screen and (min-width: 768px) {
+            .hidden-mobile {
+<!--                display: block;-->
+            }
+            .visible-mobile {
+                display: none;
+            }
+        }
+    </style>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+
+    <link rel="shortcut icon" href="{% static 'img/logo_invisible.png' %}">
+    <title>LYL.B</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #00554C">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #FFFFFF;">
+<!--                <img src="/static/img/logo_white.jpg" alt="" width="50" height="50">-->
+                LYL.B Pilates
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation" style="color: #FFFFFF;">
+              <span class="navbar-toggler-icon bg-white" style="color: #FFFFFF;"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarText">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/member" style="color: #FFFFFF;">회원관리</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/lesson" style="color: #FFFFFF;">수업관리</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/community" style="color: #FFFFFF;">게시판</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about" style="color: #FFFFFF;">소개</a>
+                    </li>
+                </ul>
+
+                <span class="navbar-text" style="color: #FFFFFF;">
+                    {% if user.is_authenticated %}
+                        <a class="nav-link btn btn-light" href="/logout">
+                            <i class="fas fa-user-times">&nbsp;&nbsp;로그아웃</i>
+                        </a>
+                    {% else %}
+                        <a class="nav-link btn btn-light" href="/login">
+                            <i class="fas fa-user-check">&nbsp;&nbsp;로그인</i>
+                        </a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="py-3"></div>
+    <div class="container-lg">
+
+<!--        <img class="img-fluid" src="/static/img/logo_white.jpg" alt="">-->
+        {% block main_area %}
+
+        {% endblock %}
+
+    </div>
+    <div class="py-3"></div>
+
+    <!--  footer  -->
+    <br><br><br><br><br>
+    <br><br><br><br><br>
+    <br><br><br><br>
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-muted">© 2021 Peach All right reserved</p>
+
+            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <img src="{% static 'img/logo_white.jpg' %}" alt="" width="50" height="50">
+            </a>
+
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="/" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="/about" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+        </footer>
+    </div>
+
+</body>
+</html>

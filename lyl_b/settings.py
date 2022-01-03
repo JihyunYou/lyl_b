@@ -48,12 +48,13 @@ INSTALLED_APPS = [
     'custom_users',
     'members',
     'lessons',
-    'qna_app',
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
     'django.contrib.humanize',
     'bootstrap_datepicker_plus',
+    'common_app',
+    'community_app',
 ]
 
 MIDDLEWARE = [
