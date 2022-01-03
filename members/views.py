@@ -51,7 +51,7 @@ class DefaultScheduleForm(ModelForm):
         widgets = {
             'lesson_time': TimePickerInput(
                 options={
-                    'stepping': 30,
+                    'stepping': 10,
                 }
             ),
         }
