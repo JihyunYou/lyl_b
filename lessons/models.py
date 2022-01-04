@@ -8,11 +8,15 @@ from members.models import Member
 
 
 GENDER_CHOICES = [
-    ('s', '개인'), ('p', '페어')
+    ('s', '개인'), ('p', '듀엣')
 ]
 
 ATTENDANCE_STATUS = [
-    (0, '수업 예정'), (1, '수업 완료'), (2, '사전 취소'), (3, '당일 취소')
+    (0, '수업 예정'),
+    (1, '수업 완료'),
+    (2, '사전 취소'),
+    (3, '당일 취소'),
+    (4, '홀딩'),
 ]
 
 
@@ -36,7 +40,7 @@ class Lesson(models.Model):
                 name='unique_lesson',
             )
         ]
-        ordering = ['lesson_date']
+        ordering = ['-lesson_date']
 
 
 # 출석 관리
@@ -56,7 +60,8 @@ class Attendance(models.Model):
     #   0: 수업 예정
     #   1: 정상 출석
     #   2: 사전 취소
-    #   3: 무단 취소
+    #   3: 당일 취소
+    #   4: 회원권 홀딩
     status = models.IntegerField(
         choices=ATTENDANCE_STATUS,
         null=True, blank=True,

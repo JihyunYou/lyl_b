@@ -42,6 +42,7 @@ urlpatterns = [
         members.views.delete_registration
     ),
 
+    # Lesson
     path('lesson/', lessons.views.list, name='lesson_list'),
     path(
         'lesson/<int:lesson_id>/',
@@ -58,14 +59,16 @@ urlpatterns = [
         lessons.views.create_manual_schedule,
         name='lesson_create'
     ),
-    path('lesson/<int:lesson_id>/delete/', lessons.views.delete_lesson),
     path(
-        'lesson/manage_attendance/',
+        'lesson/<int:lesson_id>/delete/',
+        lessons.views.delete_lesson
+     ),
+    path(
+        'lesson/<int:lesson_id>/manage_attendance/',
         lessons.views.manage_attendance,
-        name='manage_attendance'
     ),
 
-# community
+    # community
     path('community/', community_app.views.index),
     path('community/<int:post_id>/post_detail/', community_app.views.post_detail),
     path('community/add_post/', community_app.views.add_post),

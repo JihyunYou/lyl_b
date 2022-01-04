@@ -31,21 +31,19 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">수업일</th>
-                    <th scope="col">수업시간</th>
-                    <th scope="col">담당강사</th>
-                    <th>수강 인원</th>
+                    <th class="text-center" scope="col">수업일</th>
+                    <th class="text-center" scope="col">수업시간</th>
+                    <th class="text-center hidden-mobile" scope="col">담당강사</th>
+                    <th class="text-center">수강 인원</th>
                 </tr>
             </thead>
             <tbody>
                 {% for lesson in lesson_objects %}
                  <tr onClick="location.href='/lesson/{{ lesson.id }}'">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ lesson.lesson_date | date:"Y.m.d (D)" }}</td>
-                    <td>{{ lesson.lesson_time }}</td>
-                    <td>{{ lesson.teacher_id.name }}</td>
-                    <td>{{ lesson.attendance_set.count }}</td>
+                    <td class="text-center">{{ lesson.lesson_date | date:"Y.m.d (D)" }}</td>
+                    <td class="text-center">{{ lesson.lesson_time }}</td>
+                    <td class="text-center hidden-mobile">{{ lesson.teacher_id.name }}</td>
+                    <td class="text-center">{{ lesson.attendance_set.count }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,6 +1,6 @@
 import datetime
 
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from crispy_forms.helper import FormHelper
 from django.forms import ModelForm, inlineformset_factory
 from django.http import Http404, HttpResponseRedirect, HttpResponse
@@ -30,10 +30,12 @@ class LessonForm(ModelForm):
                     'locale': 'ko',
                 }
             ),
+            'lesson_time': TimePickerInput(
+                options={
+                    'stepping': 10,
+                }
+            ),
         }
-        # widgets = {
-        #     'lesson_time': forms.TimeInput(format="%H:%M"),
-        # }
     def __init__(self, *args, **kwargs):
         super(LessonForm, self).__init__(*args, **kwargs)
 
@@ -58,16 +60,13 @@ LessonAttendanceFormset = inlineformset_factory(
 )
 
 
-class LessonCreate(CreateView):
-    model = Lesson
-    fields = [
-        'lesson_date', 'lesson_time', 'teacher_id', 'lesson_type',
-    ]
-
-    def form_valid(self, form):
-        return super(LessonCreate, self).form_valid(form)
-
-    # return redirect(detail, lesson_id=model.id)
+class AttendanceManagementForm(ModelForm):
+    class Meta:
+        model = Attendance
+        fields = ['status']
+        labels = {
+            'status': '출석 상태'
+        }
 
 
 def get_all_events():
@@ -92,7 +91,8 @@ def get_all_events():
         #   수업완료: #0d6dfd
         #   사전취소: #ffc107
         #   당일취소: #dc3546
-        color_array =['#198754', '#0d6dfd', '#ffc107', '#dc3546']
+        #   홀   딩: #0dcaf0
+        color_array =['#198754', '#0d6dfd', '#ffc107', '#dc3546', '#0dcaf0']
         event_sub_arr['color'] = color_array[val.status]
 
         # start, end
@@ -151,12 +151,18 @@ def list(request):
 
 # Lesson 상세 페이지, 출석 관리
 def detail(request, lesson_id):
+    context = {}
+
     try:
         lesson_object = Lesson.objects.get(id=lesson_id)
         attendance_objects = Attendance.objects.filter(lesson_id=lesson_id)
 
         # 수업 정보 수정
         form = LessonForm(request.POST or None, instance=lesson_object)
+
+        # 출석 정보 수정 Form
+        attendance_form = AttendanceManagementForm
+
         print("test")
         if form.is_valid():
             form.save()
@@ -164,6 +170,7 @@ def detail(request, lesson_id):
 
     except:
         raise Http404("존재하지 않는 수업입니다.")
+
     return render(
         request,
         'lessons/lesson_detail.html',
@@ -171,6 +178,7 @@ def detail(request, lesson_id):
             'lesson_object': lesson_object,
             'attendance_objects': attendance_objects,
             'form': form,
+            'attendance_form': attendance_form,
         }
     )
 
@@ -266,24 +274,23 @@ def create_manual_schedule(request):
 
 
 # 출석관리
-def manage_attendance(request):
+def manage_attendance(request, lesson_id):
     # 로그인 하지 않은 사용자가 URL을 통해 회원을 삭제하는 것을 막음
     if not request.user.is_authenticated:
         print("권한 없는 사용자")
         return redirect('/')
 
-    print("test")
-    lesson_id = request.POST['lesson_id']
     member_id = request.POST['member_id']
-    attendance_flag = request.POST['attendance_flag']
+    status = request.POST['status']
+
     attendance_object = Attendance.objects.get(lesson_id=lesson_id, member_id=member_id)
-    attendance_object.status = attendance_flag
+    attendance_object.status = status
     attendance_object.save()
 
     # 원래 페이지로 보내기 위한 변수
-    next = request.POST.get('next', '/')
+    # next = request.POST.get('next', '/')
 
-    return HttpResponseRedirect(next)
+    return redirect(detail, lesson_id)
 
 
 # 수업의 경우 Foreign 키 제약사항으로 출석정보가 함께 삭제 됨
