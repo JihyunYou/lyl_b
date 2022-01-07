@@ -45,6 +45,10 @@ class AttendanceForm(ModelForm):
         model = Attendance
         fields = ['member_id']
 
+    def __init__(self, *args, **kwargs):
+        super(AttendanceForm, self).__init__(*args, **kwargs)
+        self.fields['member_id'].queryset = Member.objects.filter(status=1)
+
 
 LessonAttendanceFormset = inlineformset_factory(
     Lesson,

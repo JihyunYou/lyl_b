@@ -13,21 +13,21 @@ class MemberForm(ModelForm):
     class Meta:
         model = Member
         fields = [
-            'name', 'teacher_id', 'gender', 'date_of_birth', 'phone_number'
+            'name', 'teacher_id', 'status', 'gender', 'date_of_birth', 'phone_number'
         ]
         labels = {
             'name': '이름',
             'gender': '성별',
             'date_of_birth': '생년월일',
             'phone_number': '전화번호',
-            'teacher_id': '담당강사'
+            'teacher_id': '담당강사',
+            'status': '회원권'
         }
         widgets = {
             'date_of_birth': DatePickerInput(
                 options={
                     'format': 'YYYY-MM-DD',
                     'locale': 'ko',
-                    'defaultDate': '2000-01-01'
                 }
             ),
         }
