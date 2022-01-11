@@ -1,4 +1,5 @@
 from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
+from django.db.models import Q
 from django.forms import ModelForm, formset_factory, inlineformset_factory, NumberInput
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, redirect
@@ -96,8 +97,11 @@ class RegistrationFrom(ModelForm):
 def index(request):
     context = {}
 
-    member_objects = Member.objects.all()
-    context['member_objects'] = member_objects
+    active_member_objects = Member.objects.filter(status=1)
+    context['active_member_objects'] = active_member_objects
+
+    inactive_member_objects = Member.objects.filter(~Q(status=1))
+    context['inactive_member_objects'] = inactive_member_objects
 
     member_form = MemberForm
     defaultSchedule_formset = MemberDefaultScheduleFormset
