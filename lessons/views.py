@@ -90,7 +90,7 @@ def get_all_events():
             str_title += str(val.member_id.name)
         # 2022.01.23 빙민아 요청 사항 처리
         #   - 듀엣인데 한명마 등록시 공석 출력
-        if j == 0:
+        if i.lesson_type == 'p' and j == 0:
             str_title += ", 공석"
         str_title += ' [' + val.get_status_display() + ']'
         event_sub_arr['title'] = str_title
