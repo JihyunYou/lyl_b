@@ -34,6 +34,7 @@ urlpatterns = [
     path('login/', custom_users.views.login, name='login'),
     path('logout/', custom_users.views.logout, name='logout'),
 
+    # Member
     path('member/', members.views.index, name='member_index'),
     path('member/<int:member_id>/', members.views.detail, name='member_detail'),
     path('member/<int:member_id>/delete/', members.views.delete_member),
@@ -41,6 +42,9 @@ urlpatterns = [
         'member/<int:member_id>/registration/<int:registration_id>/delete/',
         members.views.delete_registration
     ),
+
+    # Registration
+    path('registration/', members.views.registration_list),
 
     # Lesson
     path('lesson/', lessons.views.list, name='lesson_list'),

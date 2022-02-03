@@ -25,6 +25,21 @@
     <script src="{% static 'datepicker/bootstrap-datepicker.js' %}"></script>
     <script src="{% static 'datepicker/bootstrap-datepicker.ko.min.js' %}"></script>
 
+    <!--  Bootstrap Table  -->
+    <link rel="stylesheet" href='{% static "bootstrap-table-master/bootstrap-table.min.css" %}'>
+    <script src='{% static "bootstrap-table-master/bootstrap-table.min.js" %}'></script>
+    <script src='{% static "bootstrap-table-master/locale/bootstrap-table-ko-KR.min.js" %}'></script>
+    <!--  filter control  -->
+    <link rel="stylesheet"
+          type="text/css"
+          href='{% static "bootstrap-table-master/extensions/filter-control/bootstrap-table-filter-control.css" %}'>
+    <script src='{% static "bootstrap-table-master/extensions/filter-control/bootstrap-table-filter-control.js" %}'></script>
+    <!--  table export  -->
+    <script src='{% static "bootstrap-table-master/libs/FileSaver/FileSaver.min.js" %}'></script>
+    <script src='{% static "bootstrap-table-master/libs/js-xlsx/xlsx.core.min.js" %}'></script>
+    <script src='{% static "bootstrap-table-master/extensions/export/bootstrap-table-export.js" %}'></script>
+    <script src='{% static "bootstrap-table-master/extensions/export/tableExport.js" %}'></script>
+
     <style type="text/css">
         #calendar a {color: black;}
         #calendar .fc-day.fc-day-sat a { color:#0000FF; }    /* 토요일 */
@@ -64,7 +79,9 @@
         }
     </style>
 
+    <!--  icon 사용을 위한 import  -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 
     <link rel="shortcut icon" href="{% static 'img/logo_invisible.png' %}">
     <title>LYL.B</title>
@@ -88,6 +105,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/lesson" style="color: #FFFFFF;">수업관리</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/registration" style="color: #FFFFFF;">매출관리</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/community" style="color: #FFFFFF;">게시판</a>

@@ -10,11 +10,9 @@
             </div>
             <div class="col-lg-9">
                 <div>
-                    {% if user.is_staff %}
-                    <span class="badge rounded-pill bg-danger">관리자</span>
-                    {% else %}
-                    <span class="badge rounded-pill bg-secondary">일반사용자</span>
-                    {% endif %}
+                    <span class="badge rounded-pill bg-danger">
+                        {{ user.get_user_grade_display }}
+                    </span>
                 </div>
                 {{ user.name }}
                 <span style="font-size: 12px;">

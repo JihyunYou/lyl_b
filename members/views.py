@@ -72,11 +72,12 @@ class RegistrationFrom(ModelForm):
     class Meta:
         model = Registration
         fields = [
-            'times', 'tuition', 'reg_date'
+            'times', 'tuition', 'payment', 'reg_date'
         ]
         labels = {
             'times': '등록 횟수',
             'tuition': '결제 금액',
+            'payment': '결제 수단',
             'reg_date': '결제 일자',
         }
         widgets = {
@@ -250,3 +251,13 @@ class MemberCreate(CreateView):
 
     # def get_success_url(self):
     #     return redirect('/member/')
+
+
+def registration_list(request):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
+    return render(
+        request,
+        'members/registration_list.html'
+    )

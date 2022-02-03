@@ -21,6 +21,9 @@ DAY_OF_WEEK = [
     (1, '월요일'), (2, '화요일'), (3, '수요일'), (4, '목요일'), (5, '금요일'), (6, '토요일'), (7, '일요일'),
 ]
 
+METHOD_OF_PAYMENT = [
+    (1, '현금(계좌이체)'), (2, '현금(현물)'), (3, '카드')
+]
 
 # 강습 회원
 class Member(models.Model):
@@ -89,13 +92,23 @@ class Registration(models.Model):
 
     # 등록횟수
     times = models.IntegerField(null=False)
+
+    # 등록일
     reg_date = models.DateField(null=True)
+
+    # 수업료
     tuition = models.IntegerField(null=False)
+
+    # 결제수단
+    payment = models.IntegerField(
+        choices=METHOD_OF_PAYMENT,
+        null=True
+    )
 
     input_dtime = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ['reg_date']
+        ordering = ['reg_date', 'member_id']
 
     def __str__(self):
         """String for representing the Model object."""

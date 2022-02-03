@@ -6,25 +6,7 @@
 
 <div class="row">
     <div class="col-lg-3 hidden-mobile">
-        <div class="card">
-            <div class="card-header">
-                요약
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>활성 회원 총</th>
-                            <th>{{ active_member_objects.count }} 명</th>
-                        </tr>
-                        <tr>
-                            <th>비활성 회원 총</th>
-                            <th>{{ inactive_member_objects.count }} 명</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
+        {% include 'common_app/base_left_top.html' %}
     </div>
 
     <div class="col-lg-9">

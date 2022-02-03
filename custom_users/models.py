@@ -12,7 +12,6 @@ GENDER_CHOICES = [
 ]
 
 
-
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
@@ -55,7 +54,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(
         verbose_name='name',
         max_length=20, unique=True, null=False)
-    USERNAME_FIELD = 'name'     # Username을 name로 명시
+    USERNAME_FIELD = 'name'  # Username을 name로 명시
 
     # 사이트 사용자 종류
     #   1: 사이트 관리자
@@ -82,6 +81,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     # is_staff: admin site 접근 가능 여부
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+
     # is_superuser = models.BooleanField(default=False)
     # is_staff = models.BooleanField(default=False)
 
@@ -95,9 +95,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     #   True를 반환하여 권한이 있음을 알림
     def has_perm(self, perm, obj=None):
         return True
+
     #   True를 반환하여 주어진 App의 모델에 접근 가능하도록 함
     def has_module_perms(self, app_label):
         return True
+
     #   True 가 반환되면 관리자 화면에 로그인 가능
     @property
     def is_staff(self):
