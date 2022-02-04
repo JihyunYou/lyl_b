@@ -15,7 +15,7 @@
     <div class="col-lg-9">
         <div class="row">
             <div class="col-5 text-start">
-                <h1 class="display-6 fw-bold">수업 상세 정보</h1>
+                <h3>수업 상세 정보</h3>
             </div>
             <div class="col-7 text-end">
                 <a
@@ -23,12 +23,12 @@
                     role="button"
                     href="/lesson"
                 >
-                    <i class="fas fa-backward">&nbsp;&nbsp;목록</i>
+                    <i class="fas fa-backward">&nbsp;&nbsp;수업 목록</i>
                 </a>
             </div>
         </div>
 
-        <hr class="style1" style="margin-top:0rem;">
+        <hr class="style1">
 
         <div class="card" style="margin-bottom: 20px;">
             <div class="card-header text-start">
@@ -66,13 +66,13 @@
             </div>
             <div class="card-body">
 
-                <table class="table">
+                <table class="table text-center align-middle">
                     <thead>
                         <tr>
                             <th>이름</th>
-                            <th>출결 상태</th>
-                            <th>출결 상태 변경</th>
-                            <th></th>
+                            <th>상태</th>
+                            <th>상태 변경</th>
+                            <th>회원 정보</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,7 +94,9 @@
                                         {% elif attendance.status == 4 %}
                                             bg-info
                                         {% endif %}
-                                    ">
+                                    "
+                                          style="font-size: 18px;"
+                                    >
                                         {{ attendance.get_status_display }}
                                     </span>
                                 </td>
@@ -111,7 +113,7 @@
                                 </td>
                                 <td>
                                     <a class="btn btn-dark btn-sm" href="/member/{{ attendance.member_id.id }}" role="button">
-                                        <i class="fas fa-search">&nbsp;&nbsp;회원 상세보기</i>
+                                        <i class="fas fa-search">&nbsp;&nbsp;상세보기</i>
                                     </a>
                                 </td>
                             </tr>

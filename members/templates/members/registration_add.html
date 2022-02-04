@@ -1,0 +1,45 @@
+{% extends 'common_app/base.html' %}
+
+{% load bootstrap5 %}
+
+{% block main_area %}
+
+<div class="row">
+    <div class="col-lg-3 hidden-mobile">
+        {% include 'common_app/base_left_top.html' %}
+    </div>
+    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-6">
+                <h3>매출 정보 등록</h3>
+            </div>
+            <div class="col-6 text-end">
+                <a
+                    class="btn btn-warning"
+                    role="button"
+                    href="/registration/"
+                >
+                    <i class="fas fa-backward">&nbsp;&nbsp;매출 목록</i>
+                </a>
+            </div>
+        </div>
+
+        <hr class="style1">
+
+        {{ registration_form.media }}
+        <form method="post">
+            {% csrf_token %}
+            <div class="modal-body">
+
+                {% bootstrap_form registration_form layout="horizontal" %}
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-success float-right">저장</button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -105,6 +105,10 @@ class Registration(models.Model):
         null=True
     )
 
+    description = models.TextField(
+        null=True
+    )
+
     input_dtime = models.DateTimeField(auto_now_add=True)
 
     class Meta:

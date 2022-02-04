@@ -6,14 +6,14 @@
 
 {% if user.is_authenticated %}
 <div class="row">
-    <div class="col-lg-3" style="margin-bottom: 20px;">
+    <div class="col-lg-3 hidden-mobile">
         {% include 'common_app/base_left_top.html' %}
     </div>
 
     <div class="col-lg-9">
         <div class="row">
             <div class="col-8 text-start">
-                <h1 class="display-6 fw-bold">[ {{ member_object.name }} ] 회원 상세 정보</h1>
+                <h3>[ {{ member_object.name }} ] 회원 상세 정보</h3>
             </div>
             <div class="col-4 text-end">
                 <a
@@ -21,12 +21,12 @@
                     role="button"
                     href="/member"
                 >
-                    <i class="fas fa-backward">&nbsp;&nbsp;목록</i>
+                    <i class="fas fa-backward">&nbsp;&nbsp;회원 목록</i>
                 </a>
             </div>
         </div>
 
-        <hr class="style1" style="margin-top:0rem;">
+        <hr class="style1">
 
         <div class="card" style="margin-bottom: 20px;">
             <div class="card-header">
@@ -135,10 +135,12 @@
                                     <td>{{ registration.get_payment_display }}</td>
                                     <td style="text-align: center">
                                         <a
-                                            class="btn btn-danger btn-sm"
-                                            href="/member/{{ registration.member_id.id }}/registration/{{ registration.id }}/delete"
+                                            class="btn btn-sm btn-warning"
                                             role="button"
-                                        >삭제</a>
+                                            href="/registration/{{ registration.id }}/registration_detail/"
+                                        >
+                                            <i class="fas fa-search"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 {% endfor %}

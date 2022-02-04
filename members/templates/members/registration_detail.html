@@ -1,0 +1,140 @@
+{% extends 'common_app/base.html' %}
+
+{% load bootstrap5 %}
+
+{% load humanize %}
+
+{% block main_area %}
+
+<div class="row">
+    <div class="col-lg-3 hidden-mobile">
+        {% include 'common_app/base_left_top.html' %}
+    </div>
+
+    <br>
+
+    <div class="col-lg-9">
+        <div class="row">
+            <div class="col-6 text-start">
+                <a
+                    class="btn btn-danger"
+                    role="button" data-bs-toggle="modal"
+                    data-bs-target="#deleteRegistrationModal"
+                >
+                    <i class="fas fa-trash-alt">&nbsp;&nbsp;삭제</i>
+                </a>
+
+                <a
+                    class="btn btn-success"
+                    role="button"
+                    data-bs-toggle="modal"
+                    data-bs-target="#updateRegistrationModal"
+                >
+                    <i class="fas fa-edit">&nbsp;&nbsp;수정</i>
+                </a>
+            </div>
+            <div class="col-6 text-end">
+                <a
+                    class="btn btn-warning"
+                    role="button"
+                    href="/registration"
+                >
+                    <i class="fas fa-backward">&nbsp;&nbsp;매출 목록</i>
+                </a>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="card">
+            <div class="card-body">
+                <table class="table">
+                    <tr>
+                        <th>회원</th>
+                        <td>
+                            {{ registration.member_id }}
+                            <a
+                                class="btn btn-sm btn-warning"
+                                role="button"
+                                href="/member/{{ registration.member_id.id }}/"
+                            >
+                                <i class="fas fa-search"></i>
+                            </a>
+                        </td>
+                        <th>등록 유형</th>
+                        <td>
+                            {% if registration.reg_seq == 1 %}
+                                첫 등록
+                            {% elif registration.reg_seq > 1 %}
+                                재등록
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>결제일</th>
+                        <td>{{ registration.reg_date | date:"Y.m.d (D)" }}</td>
+                        <th>등록횟수</th>
+                        <td>{{ registration.times }} 회</td>
+                    </tr>
+                    <tr>
+                        <th>결제 금액</th>
+                        <td>{{ registration.tuition | intcomma }} 원</td>
+                        <th>결제 수단</th>
+                        <td>{{ registration.get_payment_display }}</td>
+                    </tr>
+                    <tr>
+                        <th>비고</th>
+                        <td colspan="3">
+                            {{ registration.description | linebreaks }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Registration Modal -->
+<div class="modal fade" id="updateRegistrationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateRegistrationModalLabel">회원권 결재 정보 수정</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    {% bootstrap_form registration_form layout="horizontal" %}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-success float-right">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteRegistrationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">경고</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                [ {{ registration.member_id }} ] 회원의 결제 정보를 삭제하시겠습니까?
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <a class="btn btn-danger float-right" href="/registration/{{ registration.id }}/delete" role="button">
+                삭제
+            </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,15 +1,152 @@
 {% extends 'common_app/base.html' %}
 
+{% load bootstrap5 %}
+
+{% load humanize %}
+
 {% block main_area %}
 
 <div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-3 hidden-mobile">
         {% include 'common_app/base_left_top.html' %}
     </div>
 
     <br>
 
     <div class="col-lg-9">
+        <div class="row">
+            <div class="col-lg-5 text-start">
+                <h3>[ {{ load_year }} 년 {{ load_month }} 월 ] 매출 정보</h3>
+            </div>
+            <div class="col-lg-7">
+                {{ date_form.media }}
+                <form method="post" autocomplete="off">
+                    <div class="row">
+                        {% csrf_token %}
+                        <div class="col-6">
+                            {% bootstrap_field date_form.input_date show_label=False %}
+                        </div>
+                        <div class="col-6">
+                            <button id="get_accounts_btn" type="submit" class="btn btn-warning float-right">
+                                <i class="fas fa-search-dollar">&nbsp;&nbsp;불러오기</i>
+                            </button>
+
+                            <a class="btn btn-success" role="button" href="/registration/add/">
+                                <i class="fas fa-dollar-sign">&nbsp;&nbsp;결재 등록</i>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <hr class="style1" style="margin-top:0rem;">
+
+        <div class="card" style="margin-bottom: 20px;">
+            <div class="card-header">
+                요약
+            </div>
+            <div class="card-body">
+                <table class="table text-center">
+            <thead>
+                <tr>
+                    <th colspan="2">범주</th>
+                    <th>건수</th>
+                    <th>금액</th>
+                </tr>
+            </thead>
+            <tbody class="text-end">
+                <tr>
+                    <th rowspan="3" class="align-middle text-center">현금</th>
+                    <th>현금(계좌이체)</th>
+                    <td>{{ bank_count }} 건</td>
+                    <td>{{ bank_total | intcomma }} 원</td>
+                </tr>
+                <tr>
+                    <th>현금(현물)</th>
+                    <td>{{ cash_count }} 건</td>
+                    <td>{{ cash_total | intcomma }} 원</td>
+                </tr>
+                <tr>
+                    <th>현금 계</th>
+                    <td>{{ all_cash_count }} 건</td>
+                    <td>{{ all_cash_total | intcomma }} 원</td>
+                </tr>
+                <tr>
+                    <th class="text-center">카드</th>
+                    <th>계</th>
+                    <td>{{ card_count }} 건</td>
+                    <td>{{ card_total | intcomma }} 원</td>
+                </tr>
+            </tbody>
+            <tfoot class="text-end">
+                <tr>
+                    <th colspan="2">총 계</th>
+                    <td>{{ all_count }} 건</td>
+                    <td>{{ all_total | intcomma }} 원</td>
+                </tr>
+            </tfoot>
+        </table>
+            </div>
+        </div>
+
+        <table class="table"
+               data-filter-control="true"
+               data-toggle="table"
+               data-search="true"
+               data-show-search-clear-button="true"
+
+               data-show-columns="true"
+
+               data-show-export="true"
+               data-export-types="['txt', 'xlsx']"
+
+               data-pagination="true"
+               data-page-list="[10, 25, 50, 100, all]">
+            <thead class="text-center">
+                <tr>
+                    <th data-force-hide="true"></th>
+                    <th data-field="Date"
+                        data-filter-control="input">결제일</th>
+                    <th data-field="Member"
+                        data-filter-control="input">결제 회원</th>
+                    <th data-field="Amount"
+                        data-filter-control="input">결제 금액</th>
+                    <th data-field="Tuition"
+                        data-filter-control="select">결제 수단</th>
+                    <th data-field="Description"
+                        data-filter-control="input">비고</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                {% for registration in registrations %}
+                <tr>
+                    <td>
+                        <a
+                            class="btn btn-sm btn-warning"
+                            role="button"
+                            href="/registration/{{ registration.id }}/registration_detail/"
+                        >
+                            <i class="fas fa-search"></i>
+                        </a>
+                    </td>
+                    <td>{{ registration.reg_date | date:"Y.m.d" }}</td>
+                    <td>{{ registration.member_id }}</td>
+                    <td class="text-end">
+                        {{ registration.tuition | intcomma }} 원
+                    </td>
+                    <td>{{ registration.get_payment_display }}</td>
+                    <td class="text-start"
+                        style="max-width: 100px;
+                               overflow: hidden;
+                               text-overflow: ellipsis;
+                               white-space: nowrap;">
+                        {{ registration.description }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     </div>
 </div>

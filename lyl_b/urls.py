@@ -13,6 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from django.conf.urls import url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -45,6 +47,15 @@ urlpatterns = [
 
     # Registration
     path('registration/', members.views.registration_list),
+    path('registration/add/', members.views.add_registration),
+    path(
+        'registration/<int:registration_id>/registration_detail/',
+        members.views.registration_detail
+    ),
+    path(
+        'registration/<int:registration_id>/delete/',
+        members.views.delete_registration
+    ),
 
     # Lesson
     path('lesson/', lessons.views.list, name='lesson_list'),
@@ -94,6 +105,13 @@ urlpatterns = [
     path(
         'community/<int:subject_id>/subject_detail/del_subject/',
         community_app.views.del_subject
+    ),
+
+    # Autocomplete
+    url(
+        r'^member-autocomplete/$',
+        members.views.MemberAutocompelete.as_view(),
+        name='member-autocomplete',
     ),
 ]
 
