@@ -443,7 +443,7 @@ def delete_registration(request, registration_id):
 
         del_reg_seq = registration.reg_seq
 
-        registrations = Registration.objects.filter(member_id=registration.member_id.id)
+        registrations = Registration.objects.filter(member_id=registration.member_id)
         if del_reg_seq is None:
             for temp in registrations:
                 if temp.reg_seq is not None:
@@ -451,7 +451,7 @@ def delete_registration(request, registration_id):
                     temp.save()
         else:
             for temp in registrations:
-                if temp.reg_seq > del_reg_seq:
+                if temp.reg_seq is not None and temp.reg_seq > del_reg_seq:
                     temp.reg_seq -= 1
                     temp.save()
 
