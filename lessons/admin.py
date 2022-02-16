@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Lesson, Attendance
+from import_export.admin import ImportExportMixin
+
+from .models import Lesson, Attendance, History
 
 
 class LessonAdmin(admin.ModelAdmin):
@@ -62,5 +64,12 @@ class AttendanceAdmin(admin.ModelAdmin):
     get_member_name.short_description = "수강생"  # 컬럼 헤더명 변경
 
 
+class HistoryAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display = (
+        'id', 'created_at', 'created_by', 'lesson_date', 'lesson_time')
+    pass
+
+
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
+admin.site.register(History, HistoryAdmin)
