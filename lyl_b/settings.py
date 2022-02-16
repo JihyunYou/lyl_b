@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django.contrib.humanize',
     'bootstrap_datepicker_plus',
+    'import_export',
     'common_app',
     'community_app',
 ]
