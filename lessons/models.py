@@ -21,6 +21,7 @@ ATTENDANCE_STATUS = [
 
 
 class History(models.Model):
+    lesson_id = models.IntegerField(null=False)
     lesson_date = models.DateField(null=False)
     lesson_time = models.TimeField(null=False)
 

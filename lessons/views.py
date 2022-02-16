@@ -317,6 +317,7 @@ def delete_lesson(request, lesson_id):
 
             # 삭제 이력
             History.objects.create(
+                lesson_id=lesson_object.id,
                 lesson_date=lesson_object.lesson_date,
                 lesson_time=lesson_object.lesson_time,
                 created_by=request.user
