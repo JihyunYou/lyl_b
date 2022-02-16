@@ -41,6 +41,10 @@ class CustomUserAdmin(ImportExportMixin, UserAdmin):
     search_fields = ('name',)
     ordering = ('name',)
 
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
+
 
 admin.site.register(User, CustomUserAdmin)
 admin.site.unregister(Group)

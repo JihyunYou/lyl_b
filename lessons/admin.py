@@ -61,6 +61,10 @@ class AttendanceAdmin(admin.ModelAdmin):
          ),
     )
 
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
+
     def get_member_name(self, obj):
         return obj.member_id.name
 
