@@ -26,6 +26,10 @@ class LessonAdmin(admin.ModelAdmin):
          ),
     )
 
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
+
     def get_teacher_name(self, obj):
         return obj.teacher_id.name
 
