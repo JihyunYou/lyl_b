@@ -261,14 +261,15 @@ def create_manual_schedule(request):
             if not check_lesson_schedule(lesson):
                 context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
 
-                context['events'] = get_all_events
+                # context['events'] = get_all_events
 
                 # 에러가 발생해도 일단 메인 페이지로 보내기 위함
-                return render(
-                    request,
-                    'lessons/index.html',
-                    context
-                )
+                # return render(
+                #     request,
+                #     'lessons/index.html',
+                #     context
+                # )
+                return redirect('/')
 
             lesson.save()
             attendance_formset = LessonAttendanceFormset(request.POST, instance=lesson)
@@ -276,9 +277,24 @@ def create_manual_schedule(request):
                 attendance_formset.save()
             return redirect('/')
 
+        else:
+            context['error'] = "잘못된 입력 값"
+
+            context['events'] = get_all_events
+
+            # 에러가 발생해도 일단 메인 페이지로 보내기 위함
+            # return render(
+            #     request,
+            #     'lessons/index.html',
+            #     context
+            # )
+            return redirect('/')
+        
+    print("여기로 간다고?")
+
     return render(
         request,
-        'lessons/lesson_create.html',
+        'lessons/index.html',
         {
             'lesson_form': lesson_form,
             'attendance_formset': attendance_formset,
