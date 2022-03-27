@@ -260,9 +260,13 @@ def create_manual_schedule(request):
             #  수업일에 수업시간 사이에 겹치는 수업이 있는지 체크
             if not check_lesson_schedule(lesson):
                 context['error'] = "이미 수업 스케쥴이 있는 시간입니다!"
+
+                context['events'] = get_all_events
+
+                # 에러가 발생해도 일단 메인 페이지로 보내기 위함
                 return render(
                     request,
-                    'lessons/lesson_create.html',
+                    'lessons/index.html',
                     context
                 )
 
@@ -337,5 +341,5 @@ def check_lesson_schedule(lesson):
 # 시간 계산은 dummy 일자를 붙여 계산한 후 시간 추출하는 방식 사용
 def cal_end_time(start_time):
     end_time = datetime.datetime(100, 1, 1, start_time.hour, start_time.minute, start_time.second)
-    end_time = end_time + datetime.timedelta(minutes=50)
+    end_time = end_time + datetime.timedelta(minutes=49)
     return end_time.time()
