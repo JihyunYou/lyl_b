@@ -27,6 +27,10 @@ class MemberAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     ordering = ('name',)
 
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
+
 
 class RegistrationAdmin(admin.ModelAdmin):
     model = Registration
@@ -48,6 +52,10 @@ class RegistrationAdmin(admin.ModelAdmin):
             'fields': ('member_id', 'times', 'reg_date', 'tuition')}
          ),
     )
+
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
 
     def get_member_name(self, obj):
         return obj.member_id.name

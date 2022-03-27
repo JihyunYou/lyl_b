@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-zz7*59$@zi!2rd=4d-w&f9jh^ajiz9#6h=+=#7y4pcrr2*t@!h'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 # 배포시에는 CSRF 를 위해 아래 내용을 추가해 주어야 함
 CSRF_TRUSTED_ORIGINS = [
@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'django.contrib.humanize',
     'bootstrap_datepicker_plus',
+    'import_export',
     'common_app',
     'community_app',
 ]

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Lesson, Attendance
+from import_export.admin import ImportExportMixin
+
+from .models import Lesson, Attendance, History
 
 
 class LessonAdmin(admin.ModelAdmin):
@@ -23,6 +25,10 @@ class LessonAdmin(admin.ModelAdmin):
             'fields': ('teacher_id', 'lesson_date', 'lesson_time', 'lesson_type')}
          ),
     )
+
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
 
     def get_teacher_name(self, obj):
         return obj.teacher_id.name
@@ -55,6 +61,10 @@ class AttendanceAdmin(admin.ModelAdmin):
          ),
     )
 
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
+
     def get_member_name(self, obj):
         return obj.member_id.name
 
@@ -62,5 +72,12 @@ class AttendanceAdmin(admin.ModelAdmin):
     get_member_name.short_description = "수강생"  # 컬럼 헤더명 변경
 
 
+class HistoryAdmin(ImportExportMixin, admin.ModelAdmin):
+    list_display = (
+        'id', 'created_at', 'created_by', 'lesson_date', 'lesson_time')
+    pass
+
+
 admin.site.register(Lesson, LessonAdmin)
 admin.site.register(Attendance, AttendanceAdmin)
+admin.site.register(History, HistoryAdmin)

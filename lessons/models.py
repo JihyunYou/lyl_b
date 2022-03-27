@@ -20,6 +20,17 @@ ATTENDANCE_STATUS = [
 ]
 
 
+class History(models.Model):
+    lesson_id = models.IntegerField(null=False)
+    lesson_date = models.DateField(null=False)
+    lesson_time = models.TimeField(null=False)
+
+    created_by = models.ForeignKey(
+        Teacher, on_delete=models.SET_NULL, null=True
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
 # 수업 관리
 class Lesson(models.Model):
     lesson_date = models.DateField(null=False)

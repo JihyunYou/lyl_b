@@ -10,7 +10,7 @@ from django.views.generic import CreateView
 
 from custom_users.models import User
 from members.models import DefaultSchedule
-from .models import Lesson, Attendance, Member
+from .models import Lesson, Attendance, Member, History
 
 
 class LessonForm(ModelForm):
@@ -308,12 +308,28 @@ def manage_attendance(request, lesson_id):
 
 # 수업의 경우 Foreign 키 제약사항으로 출석정보가 함께 삭제 됨
 def delete_lesson(request, lesson_id):
+    if not request.user.is_authenticated:
+        return redirect('/login/')
+
     try:
         lesson_object = Lesson.objects.get(pk=lesson_id)
         # registration_objects = Registration.objects.filter(member_id=member_id)
         # registration_objects.delete()
-        lesson_object.delete()
-    except:
+
+        if lesson_object is not None:
+            print('삭제 로그 기록')
+
+            # 삭제 이력
+            History.objects.create(
+                lesson_id=lesson_object.id,
+                lesson_date=lesson_object.lesson_date,
+                lesson_time=lesson_object.lesson_time,
+                created_by=request.user
+            )
+
+            lesson_object.delete()
+    except Exception as e:
+        print(e)
         raise Http404("존재하지 않는 수업 일정입니다.")
 
     return redirect('/')

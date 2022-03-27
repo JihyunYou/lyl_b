@@ -2,12 +2,13 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from django.contrib.auth.models import Group
+from import_export.admin import ImportExportMixin
 
 from .forms import CustomUserChangeForm, CustomUserCreationForm
 from .models import User
 
 
-class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(ImportExportMixin, UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
@@ -39,6 +40,10 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ('name',)
     ordering = ('name',)
+
+    def has_delete_permission(self, request, obj=None):
+        # Disable delete
+        return False
 
 
 admin.site.register(User, CustomUserAdmin)
