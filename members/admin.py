@@ -1,8 +1,10 @@
 from django.contrib import admin
+from import_export.admin import ImportExportMixin
+
 from .models import Member, Registration
 
 
-class MemberAdmin(admin.ModelAdmin):
+class MemberAdmin(ImportExportMixin, admin.ModelAdmin):
     model = Member
 
     # Admin 화면에서 User 리스트에 출력되는 컬럼
@@ -32,7 +34,7 @@ class MemberAdmin(admin.ModelAdmin):
         return False
 
 
-class RegistrationAdmin(admin.ModelAdmin):
+class RegistrationAdmin(ImportExportMixin, admin.ModelAdmin):
     model = Registration
 
     # Admin 화면에서 User 리스트에 출력되는 컬럼

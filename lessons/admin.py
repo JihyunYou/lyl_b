@@ -4,7 +4,7 @@ from import_export.admin import ImportExportMixin
 from .models import Lesson, Attendance, History
 
 
-class LessonAdmin(admin.ModelAdmin):
+class LessonAdmin(ImportExportMixin, admin.ModelAdmin):
     model = Lesson
 
     # Admin 화면에서 User 리스트에 출력되는 컬럼
@@ -40,7 +40,7 @@ class LessonAdmin(admin.ModelAdmin):
     ordering = ('teacher_id',)
 
 
-class AttendanceAdmin(admin.ModelAdmin):
+class AttendanceAdmin(ImportExportMixin, admin.ModelAdmin):
     model = Attendance
 
     # Admin 화면에서 User 리스트에 출력되는 컬럼
